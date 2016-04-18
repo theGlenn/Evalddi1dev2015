@@ -21,6 +21,8 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         if(intent != null){
 
             String name =  intent.getStringExtra("name");
