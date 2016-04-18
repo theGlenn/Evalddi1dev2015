@@ -22,6 +22,7 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if(intent != null){
+
             String name =  intent.getStringExtra("name");
             int resId = intent.getIntExtra("image", -1);
 

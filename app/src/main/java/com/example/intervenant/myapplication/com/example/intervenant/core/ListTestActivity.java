@@ -1,6 +1,11 @@
 package com.example.intervenant.myapplication.com.example.intervenant.core;
 
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,41 +21,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.intervenant.myapplication.R;
+import com.example.intervenant.myapplication.com.example.intervenant.core.fragments.MListViewFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
 
 
-public class ListTestActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class ListTestActivity extends AppCompatActivity implements MListViewFragment.OnFragmentListInteractionListener {
 
-    ListView listView;
-    ListTestAdapter adapter;
+    ViewPager pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ArrayList<Fruit> list = new ArrayList<>();
-        list.add(new Fruit("banana", R.drawable.banana));
-        list.add(new Fruit("pear", R.drawable.pear));
-        list.add(new Fruit("apple", R.drawable.apple));
-        list.add(new Fruit("grapefruit", R.drawable.grapefruit));
-        list.add(new Fruit("orange", R.drawable.orange));
-
-        adapter = new ListTestAdapter(list);
         setContentView(R.layout.activity_list_test);
-        listView = (ListView)findViewById(R.id.listView);
-        listView.setOnItemClickListener(this);
-        listView.setAdapter(adapter);
 
+        pager = (ViewPager)findViewById(R.id.pager);
+        pager.setAdapter(new ListPagerAdapter(getSupportFragmentManager()));
+
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(pager);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-        Fruit fruit =  adapter.getItem(i);
-        Toast.makeText(this, "Clicked" + i, Toast.LENGTH_SHORT).show();
+    @Override
+    public void onFragmentListInteraction(Fruit fruit) {
         Intent detailIntent = new Intent(this, DetailActivity.class);
         detailIntent.putExtra("name", fruit.name);
         detailIntent.putExtra("image", fruit.image);
@@ -59,43 +55,27 @@ public class ListTestActivity extends AppCompatActivity implements AdapterView.O
     }
 
 
-    private class ListTestAdapter extends BaseAdapter {
+    public class ListPagerAdapter extends FragmentPagerAdapter{
 
-        ArrayList<Fruit> mList;
+        public ListPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-        ListTestAdapter(ArrayList<Fruit> list){
-            mList = list;
+        @Override
+        public Fragment getItem(int position) {
+            return MListViewFragment.newInstance(position);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return position== 0 ? "All fruits" : "Favorites";
         }
 
         @Override
         public int getCount() {
-            return mList.size();
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-
-            Fruit fruit = getItem(i);
-            LayoutInflater inflater = getLayoutInflater();
-            view = inflater.inflate(R.layout.list_test_item,null);
-
-            TextView textView = (TextView) view.findViewById(R.id.fruit_text);
-            textView.setText(fruit.name);
-
-            ImageView imgView = (ImageView) view.findViewById(R.id.fruit_img);
-            imgView.setImageResource(fruit.image);
-
-            return view;
-        }
-
-        @Override
-        public Fruit getItem(int i) {
-            return mList.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
+            return 2;
         }
     }
+
+
 }
