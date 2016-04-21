@@ -4,8 +4,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.intervenant.myapplication.R;
 import com.example.intervenant.myapplication.com.example.intervenant.core.Product;
 
@@ -14,12 +16,11 @@ import java.util.ArrayList;
 /**
  * Created by etienne-dldc on 21/04/2016.
  */
-/*
 public class ProductGridAdapter extends BaseAdapter {
 
     ArrayList<Product> mList;
 
-    ProductGridAdapter(ArrayList<Product> list){
+    public ProductGridAdapter(ArrayList<Product> list) {
         mList = list;
     }
 
@@ -38,17 +39,17 @@ public class ProductGridAdapter extends BaseAdapter {
         if(view == null){
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.product_grid_item, parent, false);
-            holder.textView  = (TextView) view.findViewById(R.id.name);
+            holder.name  = (TextView) view.findViewById(R.id.name);
+            holder.image = (ImageView) view.findViewById(R.id.image);
             view.setTag(holder);
         }else{
             holder = (ViewHolder) view.getTag();
         }
 
-        holder.textView.setText(fruit.name);
-        if(fruit.image != null){
-            Glide.with(parent.getContext()).load(fruit.image).into(holder.imgView);
-        } else if (fruit.resid != -1) {
-            holder.imgView.setImageResource(fruit.resid);
+        holder.name.setText(product.name);
+
+        if(product.image != null){
+            Glide.with(parent.getContext()).load(product.image).into(holder.image);
         }
 
         return view;
@@ -65,7 +66,7 @@ public class ProductGridAdapter extends BaseAdapter {
     }
 
     public class ViewHolder {
-        TextView textView;
+        TextView name;
+        ImageView image;
     }
 }
-*/

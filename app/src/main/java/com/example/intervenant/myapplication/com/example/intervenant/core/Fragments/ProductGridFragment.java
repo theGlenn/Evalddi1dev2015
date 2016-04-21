@@ -7,8 +7,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
+import com.android.volley.Response;
 import com.example.intervenant.myapplication.R;
+import com.example.intervenant.myapplication.com.example.intervenant.core.Adapters.ProductGridAdapter;
+import com.example.intervenant.myapplication.com.example.intervenant.core.Product;
+import com.example.intervenant.myapplication.com.example.intervenant.core.ProductProvider;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,6 +33,12 @@ public class ProductGridFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    private static final String ARG_TYPE = "type";
+    ArrayList<Product> list;
+    private int type;
+    ProductGridAdapter gridAdapter;
+    GridView gridView;
+
     public ProductGridFragment() {
         // Required empty public constructor
     }
@@ -33,9 +50,10 @@ public class ProductGridFragment extends Fragment {
      * @return A new instance of fragment ProductGridFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProductGridFragment newInstance(int position) {
+    public static ProductGridFragment newInstance(int type) {
         ProductGridFragment fragment = new ProductGridFragment();
         Bundle args = new Bundle();
+        args.putInt(ARG_TYPE, type);
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,15 +62,41 @@ public class ProductGridFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            type = getArguments().getInt(ARG_TYPE);
+            if(type == 0){
+                setHasOptionsMenu(true);
+                list = new ArrayList<Product>();
+                ProductProvider.provideFromServer(getContext(), new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray jsonArr = response.getJSONArray("data");
+                            for (int i = 0; i < jsonArr.length(); i++) {
+                                JSONObject item = jsonArr.getJSONObject(i);
+                                list.add(new Product(item));
+                                gridAdapter.notifyDataSetChanged();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }else{
+                list = ProductProvider.provideFromFavorite();
+            }
 
+            gridAdapter = new ProductGridAdapter(list);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_product_grid, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view  = inflater.inflate(R.layout.fragment_product_grid, container, false);
+
+        gridView = (GridView) view.findViewById(R.id.gridView);
+        gridView.setAdapter(gridAdapter);
+
+        return view;
     }
 
     @Override

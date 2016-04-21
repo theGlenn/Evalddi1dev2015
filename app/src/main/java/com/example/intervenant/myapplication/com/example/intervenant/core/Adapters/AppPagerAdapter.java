@@ -22,7 +22,7 @@ public class AppPagerAdapter  extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return position== 0 ? "List 1" : "List 2";
+        return position== 0 ? "Products" : "Fav <3";
     }
 
     @Override
