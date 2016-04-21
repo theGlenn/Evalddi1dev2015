@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements ProductFragmentVi
     public void onFragmentListInteraction(Product product) {
         Intent detailIntent = new Intent(this, DetailActivity.class);
         detailIntent.putExtra("name", product.name);
+        detailIntent.putExtra("info", product.description);
         detailIntent.putExtra("image", product.image);
 
         startActivity(detailIntent);

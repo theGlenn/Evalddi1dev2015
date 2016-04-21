@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.intervenant.myapplication.R;
 
 /**
@@ -19,7 +20,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.product_item);
+        setContentView(R.layout.activity_detail);
 
         Intent intent = getIntent();
 
@@ -28,12 +29,18 @@ public class DetailActivity extends AppCompatActivity {
         if(intent != null){
 
             String name =  intent.getStringExtra("name");
-            int resId = intent.getIntExtra("image", -1);
+            String description =  intent.getStringExtra("info");
+            String imgId = intent.getStringExtra("image");
 
-            product = new Product(name, resId);
-            TextView textView = (TextView)findViewById(R.id.product_text);
+            product = new Product(name, description, imgId);
+            TextView textView = (TextView)findViewById(R.id.product_detail_text);
             textView.setText(product.name);
-            ImageView imageView = (ImageView)findViewById(R.id.product_img);
+
+            TextView textViewDesc = (TextView)findViewById(R.id.product_detail_description);
+            textViewDesc.setText(product.description);
+
+            ImageView imageView = (ImageView)findViewById(R.id.product_detail_img);
+            Glide.with(this).load(product.image).into(imageView);
         }
 
 

@@ -26,8 +26,8 @@ public class ProductProvider {
     public static ArrayList<Product> provideFromLocal(){
 
         ArrayList<Product> list = new ArrayList<>();
-        list.add(new Product("doggy", R.drawable.chien));
-        list.add(new Product("doggy", R.drawable.chien));
+       /* list.add(new Product("doggy", R.drawable.chien));
+        list.add(new Product("doggy", R.drawable.chien));*/
 
         return list;
     }

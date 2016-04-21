@@ -170,7 +170,7 @@ public class ProductFragmentView extends Fragment implements AdapterView.OnItemC
             }
 
             holder.textView.setText(product.name);
-            holder.textPrice.setText(product.price);
+            holder.textPrice.setText(product.price + " €");
             Glide.with(parent.getContext()).load(product.image).into(holder.imgView);
 
             return view;
