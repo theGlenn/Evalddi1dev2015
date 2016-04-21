@@ -42,6 +42,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onFragmentInteraction(Product product) {
+        Intent detailIntent = new Intent(this, DetailActivity.class);
+        detailIntent.putExtra("name", product.name);
+        detailIntent.putExtra("price", String.valueOf(product.price));
+        detailIntent.putExtra("info", product.info);
+        detailIntent.putExtra("image", product.image);
+
+        startActivity(detailIntent);
 
     }
 
