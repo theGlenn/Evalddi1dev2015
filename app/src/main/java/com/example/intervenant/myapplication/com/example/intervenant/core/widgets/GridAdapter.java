@@ -30,7 +30,7 @@ public class GridAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
+    public Food getItem(int i) {
         return mList.get(i);
     }
 

@@ -1,18 +1,24 @@
 package com.example.intervenant.myapplication;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import com.example.intervenant.myapplication.com.example.intervenant.core.Food;
+import com.example.intervenant.myapplication.com.example.intervenant.core.FoodDetailActivity;
 import com.example.intervenant.myapplication.com.example.intervenant.core.fragments.GridViewFragment;
-import com.example.intervenant.myapplication.com.example.intervenant.core.fragments.GridViewFragment.OnFragmentInteractionListener;
-import com.example.intervenant.myapplication.com.example.intervenant.core.widgets.MyAppPagerAdapter;
+import com.example.intervenant.myapplication.com.example.intervenant.core.fragments.ListViewFragment;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, GridViewFragment.OnFragmentInteractionListener, ListViewFragment.OnFragmentInteractionListener {
 
     ViewPager viewPager;
 
@@ -27,14 +33,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
+
     @Override
     public void onClick(View view) {
 
     }
 
-
     @Override
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+    @Override
+    public void onFragmentGridInteraction(Food food) {
+
+        Intent detailIntent = new Intent(this, FoodDetailActivity.class);
+        detailIntent.putExtra("name", food.name);
+        detailIntent.putExtra("image", food.image);
+        detailIntent.putExtra("info", food.info);
+        detailIntent.putExtra("price", food.price);
+
+        startActivity(detailIntent);
+    }
+
+    public class MyAppPagerAdapter extends FragmentPagerAdapter {
+
+        public MyAppPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return position== 0 ? "Grid" : "List";
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return position== 0 ? GridViewFragment.newInstance(position) : ListViewFragment.newInstance(position);
+
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+    }
+
 }

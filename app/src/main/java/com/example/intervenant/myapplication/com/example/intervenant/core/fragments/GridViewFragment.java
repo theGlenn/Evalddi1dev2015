@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.android.volley.Response;
@@ -22,6 +23,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -30,7 +33,7 @@ import java.util.ArrayList;
  * Use the {@link GridViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GridViewFragment extends Fragment {
+public class GridViewFragment extends Fragment implements AdapterView.OnItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String POSITION = "position";
@@ -109,21 +112,13 @@ public class GridViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_grid_view, container, false);
 
         gridView = (GridView) view.findViewById(R.id.gridview);
+        gridView.setOnItemClickListener(this);
         gridView.setAdapter(adapter);
 
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -143,6 +138,18 @@ public class GridViewFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Food food = adapter.getItem(position);
+
+        if (mListener != null) {
+            mListener.onFragmentGridInteraction(food);
+        }
+    }
+
+
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -155,7 +162,8 @@ public class GridViewFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentGridInteraction(Food food);
+
     }
 
 }

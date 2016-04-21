@@ -9,11 +9,11 @@ import org.json.JSONObject;
 public class Food {
 
     public String name;
-    public double price;
+    public String price;
     public String info;
     public String image;
 
-    public Food (String name, double price, String info, String image){
+    public Food (String name, String price, String info, String image){
         this.name = name;
         this.price = price;
         this.info = info;
@@ -22,9 +22,8 @@ public class Food {
 
     public Food (JSONObject obj) throws JSONException {
         this.name = obj.getString("name");
-        this.price = obj.getDouble("price");
+        this.price = obj.getString("price");
         this.info = obj.getString("info");
         this.image = obj.getString("image");
     }
-
 }
