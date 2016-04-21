@@ -5,10 +5,10 @@ package com.example.intervenant.myapplication.com.example.intervenant.core;
  */
 public class Product {
 
-    String name;
-    float price;
-    String info;
-    String image;
+    public String name;
+    public float price;
+    public String info;
+    public String image;
 
     public Product(String name, float price, String info, String img){
         this.name = name;

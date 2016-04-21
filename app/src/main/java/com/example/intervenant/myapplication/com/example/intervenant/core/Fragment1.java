@@ -104,13 +104,6 @@ public class Fragment1 extends Fragment implements AdapterView.OnItemClickListen
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -155,7 +148,10 @@ public class Fragment1 extends Fragment implements AdapterView.OnItemClickListen
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+        Product product =  adapter.getItem(i);
+        if (mListener != null) {
+            mListener.onFragmentInteraction(product);
+        }
     }
 
     /**
@@ -170,7 +166,9 @@ public class Fragment1 extends Fragment implements AdapterView.OnItemClickListen
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Product product);
+
+
     }
 
     private class ListAdapter extends BaseAdapter {
