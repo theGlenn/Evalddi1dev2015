@@ -1,6 +1,7 @@
 package com.example.intervenant.myapplication.com.example.intervenant.core.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -26,6 +27,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -56,6 +58,7 @@ public class MGridViewFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             list = new ArrayList<>();
             gridType = getArguments().getInt(ARG_PARAM1);
@@ -75,8 +78,22 @@ public class MGridViewFragment extends Fragment implements AdapterView.OnItemCli
                     }
                 });
             }else{
-                list = ProductProvider.provideFromCart();
-                this.setHasOptionsMenu(true);
+                String response = ProductProvider.provideFromCart(getContext());
+
+                if(response != null) {
+                    try {
+                        Gson gson = new Gson(); // Or use new GsonBuilder().create();
+                        JSONArray json = new JSONArray("[" + response + "]");
+                        Type gridType = new TypeToken<List<Product>>(){}.getType();
+                        ArrayList<Product> data = gson.fromJson(json.toString(), gridType);
+                        list.clear();
+                        list.addAll(data);
+                        adapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    this.setHasOptionsMenu(true);
+                }
             }
             adapter = new ListTestAdapter(list);
         }
@@ -135,13 +152,13 @@ public class MGridViewFragment extends Fragment implements AdapterView.OnItemCli
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.pay:
-                sync();
+                pay();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-    private void sync() {
+    private void pay() {
         Toast.makeText(getContext(), "PAY", Toast.LENGTH_SHORT).show();
     }
     private class ListTestAdapter extends BaseAdapter {

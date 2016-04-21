@@ -11,7 +11,7 @@ public class Product {
 
     public Product(String name, String price, String info, String image){
         this.name = name;
-        this.price = "$ " + price;
+        this.price = price;
         this.info = info;
         this.image = image;
     }
