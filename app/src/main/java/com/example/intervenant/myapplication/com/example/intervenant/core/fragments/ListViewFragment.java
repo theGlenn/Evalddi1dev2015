@@ -4,11 +4,27 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.bumptech.glide.Glide;
 import com.example.intervenant.myapplication.R;
+import com.example.intervenant.myapplication.com.example.intervenant.core.Food;
+import com.example.intervenant.myapplication.com.example.intervenant.core.FoodProvider;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +42,9 @@ public class ListViewFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private int position;
 
+    ArrayList<Food> list = new ArrayList<>();
+    ListView listView;
+    ListAdapter adapter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -53,7 +72,10 @@ public class ListViewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            list = new ArrayList<>();
+            position = getArguments().getInt(POSITION);
 
+            adapter = new ListAdapter(list);
         }
     }
 
@@ -101,5 +123,59 @@ public class ListViewFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private class ListAdapter extends BaseAdapter {
+
+        ArrayList<Food> mList;
+
+        ListAdapter(ArrayList<Food> list){
+            mList = list;
+        }
+
+        @Override
+        public int getCount() {
+            return mList.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return mList.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup parent) {
+            Food food = (Food) getItem(i);
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+            ViewHolder holder;
+            if(view == null){
+                holder = new ViewHolder();
+                view = inflater.inflate(R.layout.list_item, parent, false);
+                holder.textView  = (TextView) view.findViewById(R.id.food_text);
+                holder.imgView = (ImageView) view.findViewById(R.id.food_img);
+                view.setTag(holder);
+            }else{
+                holder = (ViewHolder) view.getTag();
+            }
+
+            holder.textView.setText(food.name);
+
+            if(food.image != null){
+                Glide.with(getContext()).load(food.image).into(holder.imgView);
+            }
+
+            return view;
+        }
+
+        public class ViewHolder {
+            TextView textView;
+            ImageView imgView;
+        }
     }
 }
