@@ -1,7 +1,6 @@
 package com.example.intervenant.myapplication.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -37,7 +36,7 @@ public class ProductGridFragment extends Fragment implements AdapterView.OnItemC
     // TODO: Rename and change types of parameters
     private int position;
 
-    private OnFragmentInteractionListener mListener;
+    private OnFragmentListInteractionListener mListener;
     private GridView gridView;
     private ProductGridAdapter adapter;
     private ArrayList<Product> list;
@@ -91,7 +90,7 @@ public class ProductGridFragment extends Fragment implements AdapterView.OnItemC
                 });
             }
 
-            adapter = new ProductGridAdapter(list, getContext());
+            adapter = new ProductGridAdapter(list);
         }
     }
 
@@ -108,18 +107,11 @@ public class ProductGridFragment extends Fragment implements AdapterView.OnItemC
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnFragmentListInteractionListener) {
+            mListener = (OnFragmentListInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -134,7 +126,10 @@ public class ProductGridFragment extends Fragment implements AdapterView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+        Product product = adapter.getItem(i);
+        if (mListener != null) {
+            mListener.onFragmentListInteraction(product);
+        }
     }
 
     /**
@@ -147,8 +142,7 @@ public class ProductGridFragment extends Fragment implements AdapterView.OnItemC
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public interface OnFragmentListInteractionListener {
+        void onFragmentListInteraction(Product product);
     }
 }

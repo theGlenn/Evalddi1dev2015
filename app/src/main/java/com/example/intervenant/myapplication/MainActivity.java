@@ -1,16 +1,17 @@
 package com.example.intervenant.myapplication;
 
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.intervenant.myapplication.fragments.ProductGridFragment.OnFragmentInteractionListener;
+import com.example.intervenant.myapplication.com.example.intervenant.core.DetailActivity;
+import com.example.intervenant.myapplication.fragments.ProductGridFragment;
 import com.example.intervenant.myapplication.widgets.ViewPagerAdapter;
 
 
-public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements ProductGridFragment.OnFragmentListInteractionListener {
 
     ViewPager viewPager;
 
@@ -27,7 +28,13 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onFragmentListInteraction(Product product) {
+        Intent detailIntent = new Intent(this, DetailActivity.class);
+        detailIntent.putExtra("name", product.name);
+        detailIntent.putExtra("price", product.price);
+        detailIntent.putExtra("info", product.info);
+        detailIntent.putExtra("image", product.image);
 
+        startActivity(detailIntent);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.intervenant.myapplication.widgets;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +23,8 @@ public class ProductGridAdapter extends BaseAdapter {
     ArrayList<Product> mList;
     private Context context;
 
-    public ProductGridAdapter(ArrayList<Product> list, Context c){
+    public ProductGridAdapter(ArrayList<Product> list){
         mList = list;
-        context = c;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ProductGridAdapter extends BaseAdapter {
         }
 
         holder.name.setText(product.name);
-        Glide.with(context).load(product.image).into(holder.image);
+        Glide.with(parent.getContext()).load(product.image).into(holder.image);
 
         return view;
     }
@@ -67,8 +67,13 @@ public class ProductGridAdapter extends BaseAdapter {
         return i;
     }
 
-    public class ViewHolder {
+    public class ViewHolder implements View.OnClickListener {
         TextView name;
         ImageView image;
+
+        @Override
+        public void onClick(View view) {
+            Log.d("myLogs", "click");
+        }
     }
 }
