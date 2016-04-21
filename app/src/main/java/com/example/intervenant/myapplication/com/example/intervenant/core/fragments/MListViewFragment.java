@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,22 +23,22 @@ import com.example.intervenant.myapplication.com.example.intervenant.core.Produc
 import java.util.ArrayList;
 import java.util.List;
 
-public class MGridViewFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class MListViewFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     ListView listView;
-    ProductListAdapter adapter;
+    ProductListGridAdapter adapter;
 
     private static final String ARG_PARAM1 = "param1";
     private int listType;
     ArrayList<Product> list;
     private OnFragmentInteractionListener mListener;
 
-    public MGridViewFragment() {
+    public MListViewFragment() {
         // Required empty public constructor
     }
 
-    public static MGridViewFragment newInstance(int type) {
-        MGridViewFragment fragment = new MGridViewFragment();
+    public static MListViewFragment newInstance(int type) {
+        MListViewFragment fragment = new MListViewFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, type);
         fragment.setArguments(args);
@@ -54,15 +53,33 @@ public class MGridViewFragment extends Fragment implements AdapterView.OnItemCli
             listType = getArguments().getInt(ARG_PARAM1);
 
         }
-        adapter = new ProductListAdapter(list, getContext());
+        adapter = new ProductListGridAdapter(list, getContext(), listType);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view;
 
-        View view =  inflater.inflate(R.layout.fragment_mgrid_view, container, false);
-        GridView gridview = (GridView) view.findViewById(R.id.gridview);
-        gridview.setAdapter(new ProductListAdapter(list, getActivity()));
+        if(listType == 0){
+            view =  inflater.inflate(R.layout.fragment_mgrid_view, container, false);
+            GridView gridview = (GridView) view.findViewById(R.id.gridview);
+            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View v,
+                                        int position, long id) {
+                    Toast.makeText(getContext(), "" + position,
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+            gridview.setAdapter(adapter);
+        } else {
+            view =  inflater.inflate(R.layout.fragment_mlist_view, container, false);
+
+            listView = (ListView)view.findViewById(R.id.listView);
+            listView.setOnItemClickListener(this);
+            listView.setAdapter(adapter);
+        }
+
+
         ProductProvider.provideFromServer(getContext(), new ProductProvider.ProviderListener(){
             @Override
             public void provideProductlist(List<Product> productList) {
@@ -70,14 +87,7 @@ public class MGridViewFragment extends Fragment implements AdapterView.OnItemCli
                 adapter.update(productList);
             }
         });
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Toast.makeText(getContext(), "" + position,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-        gridview.setAdapter(adapter);
+
 
         return view;
     }
@@ -116,14 +126,16 @@ public class MGridViewFragment extends Fragment implements AdapterView.OnItemCli
         void onFragmentInteraction(Uri uri);
     }
 
-    private class ProductListAdapter extends BaseAdapter {
+    private class ProductListGridAdapter extends BaseAdapter {
 
         ArrayList<Product> mList;
-        private Context mContext;
+        Context mContext;
+        int mType;
 
-        ProductListAdapter(ArrayList<Product> list, Context context){
+        ProductListGridAdapter(ArrayList<Product> list, Context context, int type){
             mList = list;
             mContext = context;
+            mType = type;
         }
 
         @Override
@@ -140,9 +152,17 @@ public class MGridViewFragment extends Fragment implements AdapterView.OnItemCli
             ViewHolder holder;
             if(view == null){
                 holder = new ViewHolder();
-                view = inflater.inflate(R.layout.grid_item_layout, parent, false);
-                holder.textView  = (TextView) view.findViewById(R.id.product_grid_text);
-                holder.imgView = (ImageView) view.findViewById(R.id.product_grid_image);
+                if (mType == 0) {
+                    view = inflater.inflate(R.layout.grid_item_layout, parent, false);
+                    holder.textView  = (TextView) view.findViewById(R.id.product_grid_text);
+                    holder.imgView = (ImageView) view.findViewById(R.id.product_grid_image);
+                } else {
+                    view = inflater.inflate(R.layout.list_item_layout, parent, false);
+                    holder.textView  = (TextView) view.findViewById(R.id.product_list_text);
+                    holder.imgView = (ImageView) view.findViewById(R.id.product_list_image);
+                }
+
+
                 view.setTag(holder);
             }else{
                 holder = (ViewHolder) view.getTag();

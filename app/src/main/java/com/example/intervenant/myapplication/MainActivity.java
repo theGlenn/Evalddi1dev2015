@@ -1,6 +1,5 @@
 package com.example.intervenant.myapplication;
 
-import android.content.Context;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,26 +8,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.intervenant.myapplication.com.example.intervenant.core.Product;
-import com.example.intervenant.myapplication.com.example.intervenant.core.ProductProvider;
-import com.example.intervenant.myapplication.com.example.intervenant.core.fragments.MGridViewFragment;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.intervenant.myapplication.com.example.intervenant.core.fragments.MListViewFragment;
 
 
-public class MainActivity extends AppCompatActivity implements MGridViewFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MListViewFragment.OnFragmentInteractionListener {
 
     ViewPager pager;
 
@@ -60,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements MGridViewFragment
 
         @Override
         public Fragment getItem(int position) {
-            return MGridViewFragment.newInstance(position);
+            return MListViewFragment.newInstance(position);
         }
 
         @Override
