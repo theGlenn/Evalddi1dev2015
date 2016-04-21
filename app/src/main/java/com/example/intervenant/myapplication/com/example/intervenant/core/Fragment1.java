@@ -4,11 +4,29 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.bumptech.glide.Glide;
 import com.example.intervenant.myapplication.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,7 +36,7 @@ import com.example.intervenant.myapplication.R;
  * Use the {@link Fragment1#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment1 extends Fragment {
+public class Fragment1 extends Fragment implements AdapterView.OnItemClickListener  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,6 +47,12 @@ public class Fragment1 extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    GridView gridView;
+    ListAdapter adapter;
+
+    ArrayList<Product> list;
+    private int listType;
 
     public Fragment1() {
         // Required empty public constructor
@@ -55,7 +79,15 @@ public class Fragment1 extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getInt(ARG_PARAM1,0);
+            list = new ArrayList<>();
+            listType = getArguments().getInt(ARG_PARAM1);
+
+
+            if(listType == 0) {
+                this.setHasOptionsMenu(true);
+            }
+
+            adapter = new ListAdapter(list);
         }
     }
 
@@ -63,13 +95,44 @@ public class Fragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fragment1, container, false);
+        View view = inflater.inflate(R.layout.fragment_fragment1, container, false);
+
+        gridView = (GridView)view.findViewById(R.id.gridView);
+        gridView.setOnItemClickListener(this);
+        gridView.setAdapter(adapter);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (listType == 0) {
+            ProductProvider.provideFromServer(getContext(), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+
+                    Gson gson = new Gson(); // Or use new GsonBuilder().create();
+                    JSONArray json = response.optJSONArray("data");
+
+                    Type listType = new TypeToken<List<Product>>() {
+                    }.getType();
+
+                    ArrayList<Product> array = gson.fromJson(json.toString(), listType);
+
+                    adapter.update(array);
+                }
+            });
+
+        } else {
+            adapter.update(ProductProvider.provideFromFavorite(this.getContext()));
         }
     }
 
@@ -90,6 +153,11 @@ public class Fragment1 extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -103,5 +171,63 @@ public class Fragment1 extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private class ListAdapter extends BaseAdapter {
+
+        ArrayList<Product> mList;
+
+        ListAdapter(ArrayList<Product> list){
+            mList = list;
+        }
+
+        @Override
+        public int getCount() {
+            return mList.size();
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup parent) {
+
+            Product product = getItem(i);
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+            ViewHolder holder;
+            if(view == null){
+                holder = new ViewHolder();
+                view = inflater.inflate(R.layout.list_item, parent, false);
+                holder.textView  = (TextView) view.findViewById(R.id.text);
+                holder.imgView = (ImageView) view.findViewById(R.id.img);
+                view.setTag(holder);
+            }else{
+                holder = (ViewHolder) view.getTag();
+            }
+
+            holder.textView.setText(product.name);
+            Glide.with(parent.getContext()).load(mList.get(i).getImageUrl()).into(holder.imgView);
+
+            return view;
+        }
+
+        public void update(ArrayList<Product> list) {
+            mList.clear();
+            mList.addAll(list);
+            this.notifyDataSetChanged();
+        }
+
+        @Override
+        public Product getItem(int i) {
+            return mList.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        public class ViewHolder {
+            TextView textView;
+            ImageView imgView;
+        }
     }
 }
