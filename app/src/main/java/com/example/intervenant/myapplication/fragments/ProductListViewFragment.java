@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.GridView;
@@ -29,7 +30,6 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ProductListViewFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link ProductListViewFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -42,6 +42,9 @@ public class ProductListViewFragment extends Fragment implements AdapterView.OnI
     private static final String ARG_PARAM1 = "param1";
 
     ArrayList<Product> list;
+    ArrayList<Product> cartList;
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
     private int listType;
 
     private OnFragmentListInteractionListener mListener;
@@ -62,6 +65,20 @@ public class ProductListViewFragment extends Fragment implements AdapterView.OnI
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        editor     = sharedPref.edit();
+
+        //Retrive cart
+        Gson gson = new Gson();
+        String json = sharedPref.getString("cart", "");
+        ArrayList<Product> cartList = gson.fromJson(json, ArrayList.class);
+
+        if(cartList == null) {
+            cartList = new ArrayList<Product>();
+        }
+
+        Log.v("cart", String.valueOf(cartList));
+
         if (getArguments() != null) {
             list = new ArrayList<>();
             listType = getArguments().getInt(ARG_PARAM1);
@@ -78,10 +95,8 @@ public class ProductListViewFragment extends Fragment implements AdapterView.OnI
                 list = ProductProvider.provideFromBasket();
             }
 
-            adapter = new ProductListAdapter(list);
+            adapter = new ProductListAdapter(list, cartList);
         }
-
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -101,10 +116,10 @@ public class ProductListViewFragment extends Fragment implements AdapterView.OnI
         super.onAttach(context);
         if (context instanceof OnFragmentListInteractionListener) {
             mListener = (OnFragmentListInteractionListener) context;
-        } /*else {
+        } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }*/
+        }
     }
 
     @Override
@@ -140,10 +155,12 @@ public class ProductListViewFragment extends Fragment implements AdapterView.OnI
     private class ProductListAdapter extends BaseAdapter {
 
         ArrayList<Product> mList;
+        ArrayList<Product> cartList;
 
-        ProductListAdapter(ArrayList<Product> list){
+        ProductListAdapter(ArrayList<Product> list, ArrayList<Product> cart){
             mList = list;
-        }
+            cartList = cart;
+;        }
 
         @Override
         public int getCount() {
@@ -153,11 +170,8 @@ public class ProductListViewFragment extends Fragment implements AdapterView.OnI
         @Override
         public View getView(int i, View view, ViewGroup parent) {
 
-            Product product = getItem(i);
+            final Product product = getItem(i);
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            Gson gson = new Gson();
-            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-            String json = sharedPref.getString("products", "");
 
             ViewHolder holder;
             if(view == null){
@@ -165,6 +179,13 @@ public class ProductListViewFragment extends Fragment implements AdapterView.OnI
                 view = inflater.inflate(R.layout.fragment_item, parent, false);
                 holder.textView  = (TextView) view.findViewById(R.id.productName);
                 holder.imgView = (ImageView) view.findViewById(R.id.productImage);
+                holder.button = (Button) view.findViewById(R.id.button);
+
+                holder.button.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        addToCart(product);
+                    }
+                });
 
                 view.setTag(holder);
             } else{
@@ -194,6 +215,16 @@ public class ProductListViewFragment extends Fragment implements AdapterView.OnI
         public class ViewHolder {
             TextView textView;
             ImageView imgView;
+            Button button;
+        }
+
+        public void addToCart(Product product) {
+            cartList.add(product);
+
+            Gson gson = new Gson();
+            String json = gson.toJson(cartList);
+            editor.putString("cart", json);
+            editor.commit();
         }
     }
 }
