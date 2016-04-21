@@ -1,14 +1,17 @@
 package com.example.intervenant.myapplication;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+
+import com.example.intervenant.myapplication.com.example.intervenant.core.DetailActivity;
+import com.example.intervenant.myapplication.fragments.ProductGridFragment;
+import com.example.intervenant.myapplication.widgets.ViewPagerAdapter;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements ProductGridFragment.OnFragmentListInteractionListener {
 
     ViewPager viewPager;
 
@@ -17,13 +20,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        viewPager = findViewById(R.id.pager);
+        viewPager = (ViewPager)findViewById(R.id.pager);
+        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
+
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
-    public void onClick(View view) {
+    public void onFragmentListInteraction(Product product) {
+        Intent detailIntent = new Intent(this, DetailActivity.class);
+        detailIntent.putExtra("name", product.name);
+        detailIntent.putExtra("price", product.price);
+        detailIntent.putExtra("info", product.info);
+        detailIntent.putExtra("image", product.image);
 
+        startActivity(detailIntent);
     }
-
-
 }
