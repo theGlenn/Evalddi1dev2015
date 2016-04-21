@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -233,10 +234,36 @@ public class Frangment extends Fragment implements AdapterView.OnItemClickListen
             ViewHolder holder;
             if(view == null){
                 holder = new ViewHolder();
-                view = inflater.inflate(R.layout.grid_item, parent, false);
-                holder.textView  = (TextView) view.findViewById(R.id.textViewProduct);
-                holder.imgView = (ImageView) view.findViewById(R.id.imageView);
-                view.setTag(holder);
+
+                if (listType == 0) {
+                    view = inflater.inflate(R.layout.grid_item, parent, false);
+                    holder.textView = (TextView) view.findViewById(R.id.textViewProduct);
+                    holder.imgView = (ImageView) view.findViewById(R.id.imageView);
+                    view.setTag(holder);
+                }
+                else {
+                    view = inflater.inflate(R.layout.list_item, parent, false);
+                    holder.textView = (TextView) view.findViewById(R.id.textViewList);
+                    holder.imgView = (ImageView) view.findViewById(R.id.imageViewList);
+                    holder.button = (Button) view.findViewById(R.id.removeButton);
+
+
+                    holder.button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            View parentRow = (View) view.getParent();
+                            ListView listView = (ListView) parentRow.getParent();
+                            final int position = listView.getPositionForView(parentRow);
+
+                            mList.remove(position);
+
+                            update();
+
+                            ProductProvider.removeProductFromCart(getContext(), position);
+                        }
+                    });
+                    view.setTag(holder);
+                }
             }else{
                 holder = (ViewHolder) view.getTag();
             }
@@ -246,6 +273,10 @@ public class Frangment extends Fragment implements AdapterView.OnItemClickListen
 //            holder.imgView.setImageResource(product.image);
 
             return view;
+        }
+
+        public void update(){
+            this.notifyDataSetChanged();
         }
 
         @Override
@@ -268,6 +299,7 @@ public class Frangment extends Fragment implements AdapterView.OnItemClickListen
         public class ViewHolder {
             TextView textView;
             ImageView imgView;
+            Button button;
         }
     }
 }

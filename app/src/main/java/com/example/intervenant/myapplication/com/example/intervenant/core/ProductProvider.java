@@ -3,6 +3,7 @@ package com.example.intervenant.myapplication.com.example.intervenant.core;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.View;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;
@@ -103,6 +104,27 @@ public class ProductProvider {
         String json = gson.toJson(list);
         prefsEditor.putString("cart", json);
         prefsEditor.commit();
+    }
+
+    public static void removeProductFromCart(Context ctx, Product f){
+        ArrayList<Product> list = ProductProvider.provideFromCart(ctx);
+        Log.i("remove","before"+list.size());
+        for (int i = 0; i < list.size(); i++) {
+            if(list.get(i).name.equals(f.name)) {
+                list.remove(i);
+                break;
+            }
+        }
+        Log.i("remove","after"+list.size());
+        ProductProvider.saveToMemory(ctx,list);
+    }
+
+    public static void removeProductFromCart(Context ctx, int position){
+        ArrayList<Product> list = ProductProvider.provideFromCart(ctx);
+        Log.i("remove","before"+list.size());
+        list.remove(position);
+        Log.i("remove","after"+list.size());
+        ProductProvider.saveToMemory(ctx,list);
     }
 
 }
