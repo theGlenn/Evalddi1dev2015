@@ -13,22 +13,46 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/apple" />
+        android:src="@drawable/almond"
+        android:layout_below="@+id/switchCart"
+        android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:id="@+id/textView"
+    <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="42dp"
-        android:layout_toRightOf="@+id/imageView"
+        android:text="Ajouter au panier"
+        android:id="@+id/switchCart"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="test"
-        android:textSize="45sp" />
+        android:textSize="45sp"
+        android:layout_above="@+id/price"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test"
+        android:textSize="45sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/price"
+        android:layout_alignStart="@+id/price" />
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test"
+        android:textSize="45sp"
+        android:layout_above="@+id/info"
+        android:layout_alignLeft="@+id/name"
+        android:layout_alignStart="@+id/name" />
 
 
 </RelativeLayout>
