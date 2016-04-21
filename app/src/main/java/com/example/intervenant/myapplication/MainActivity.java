@@ -1,41 +1,50 @@
 package com.example.intervenant.myapplication;
 
-import android.support.v7.app.AppCompatActivity;
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+
+import com.example.intervenant.myapplication.fragments.ProductFragment;
+import com.example.intervenant.myapplication.model.Product;
+import com.example.intervenant.myapplication.widgets.ProductsAdapter;
+import com.example.intervenant.myapplication.widgets.ProductsFragmentAdapter;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements ProductFragment.OnProductItemClickListener {
+
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TextView textView = (TextView) findViewById(R.id.hello);
-        textView.setText(R.string.text_test);
 
-        Button goList = (Button)findViewById(R.id.goListButton);
-        goList.setOnClickListener(this);
-        goList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goListToListActivity();
-            }
-        });
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(new ProductsFragmentAdapter(getSupportFragmentManager()));
 
-
-
-
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public void onClick(View view) {
-        goListToListActivity();
-    }
+    public void onProductItemSelected(Product product, ProductsAdapter.ViewHolder holder) {
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(Product.TAG, product.toJson());
 
-    public void goListToListActivity(){
+
+        Pair<View, String> p1 = Pair.create((View) holder.imageView, "product_img");
+        Pair<View, String> p2 = Pair.create((View) holder.nameView, "product_text");
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, p1, p2);
+        startActivity(intent, options.toBundle());
 
     }
 }
