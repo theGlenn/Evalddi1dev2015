@@ -17,15 +17,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.intervenant.myapplication.com.example.intervenant.core.Adapters.AppPagerAdapter;
+import com.example.intervenant.myapplication.com.example.intervenant.core.Fragments.ProductCartFragment;
 import com.example.intervenant.myapplication.com.example.intervenant.core.Fragments.ProductGridFragment;
-import com.example.intervenant.myapplication.com.example.intervenant.core.Fragments.ProductGridFragment.OnFragmentInteractionListener;
 import com.example.intervenant.myapplication.com.example.intervenant.core.Product;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements ProductGridFragment.OnFragmentInteractionListener, ProductCartFragment.OnFragmentInteractionListener {
 
     ViewPager pager;
 
@@ -46,12 +46,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         Intent detailIntent = new Intent(this, ProductDetailActivity.class);
         Gson gson = new Gson();
         detailIntent.putExtra("product", gson.toJson(product));
-        /*
-        detailIntent.putExtra("name", product.name);
-        detailIntent.putExtra("image", product.image);
-        detailIntent.putExtra("info", product.info);
-        detailIntent.putExtra("price", product.price);
-        */
         startActivity(detailIntent);
     }
+
 }

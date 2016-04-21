@@ -4,9 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -18,15 +16,11 @@ import java.util.ArrayList;
 /**
  * Created by etienne-dldc on 21/04/2016.
  */
-public class ProductGridAdapter extends BaseAdapter {
+public class ProductCartListAdapter extends BaseAdapter {
 
     ArrayList<Product> mList;
 
-    public ProductGridAdapter(ArrayList<Product> list) {
-        mList = list;
-    }
-
-    public void updateList (ArrayList<Product> list) {
+    public ProductCartListAdapter (ArrayList<Product> list) {
         mList = list;
     }
 
@@ -44,7 +38,7 @@ public class ProductGridAdapter extends BaseAdapter {
         ViewHolder holder;
         if(view == null){
             holder = new ViewHolder();
-            view = inflater.inflate(R.layout.fragment_product_grid_item, parent, false);
+            view = inflater.inflate(R.layout.fragment_product_cart_item, parent, false);
             holder.name  = (TextView) view.findViewById(R.id.name);
             holder.image = (ImageView) view.findViewById(R.id.image);
             view.setTag(holder);
