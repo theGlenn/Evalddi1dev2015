@@ -3,4 +3,5 @@
 
     <string name="dash">\u0020-\u0020</string>
     <string name="dollar">$</string>
+    <string name="no_description">No description available</string>
 </resources>

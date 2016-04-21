@@ -7,11 +7,16 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.intervenant.myapplication.Adapters.ProductsFragmentAdapter;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     TabLayout tabLayout;
     ProductsFragmentAdapter adapterViewPager;
+    List<Product> cartList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.pager);
-
 
         adapterViewPager = new ProductsFragmentAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapterViewPager);

@@ -1,6 +1,7 @@
 package com.example.intervenant.myapplication.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.GridView;
 import com.android.volley.Response;
 import com.example.intervenant.myapplication.Adapters.ProductsAdapter;
 import com.example.intervenant.myapplication.Product;
+import com.example.intervenant.myapplication.ProductDetailsActivity;
 import com.example.intervenant.myapplication.R;
 import com.example.intervenant.myapplication.com.example.intervenant.core.ProductProvider;
 import com.google.gson.Gson;
@@ -108,15 +110,15 @@ public class ProductsFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     // TODO: ADD PRODUCT DETAILS
-//                    Product product = adapter.getItem(i);
-//
-//                    Intent intent = new Intent(getActivity(), DetailsActivity.class);
-//                    intent.putExtra("name", product.getName());
-//                    intent.putExtra("price", product.getPrice());
-//                    intent.putExtra("info", product.getInfo());
-//                    intent.putExtra("imageUrl", product.getImageUrl());
-//
-//                    startActivity(intent);
+                    Product product = adapter.getItem(i);
+
+                    Intent intent = new Intent(getActivity(), ProductDetailsActivity.class);
+                    intent.putExtra("name", product.getName());
+                    intent.putExtra("price", product.getPrice());
+                    intent.putExtra("info", product.getInfo());
+                    intent.putExtra("image", product.getImage());
+
+                    startActivity(intent);
                 }
             });
             gridView.setAdapter(adapter);
