@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-    <!-- A CardView that contains a TextView -->
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         card_view:cardCornerRadius="2dp"
@@ -16,26 +16,24 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <ImageView
-                android:transitionName="product_img"
                 android:id="@+id/product_img"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:background="@android:color/darker_gray"
                 android:scaleType="fitCenter"
                 android:src="@mipmap/ic_launcher" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="@dimen/text_margin">
 
                 <TextView
-                    android:transitionName="product_text"
                     android:id="@+id/product_name"
                     style="?android:textAppearanceListItemSmall"
                     android:layout_width="match_parent"
@@ -53,4 +51,5 @@
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
+
 </LinearLayout>

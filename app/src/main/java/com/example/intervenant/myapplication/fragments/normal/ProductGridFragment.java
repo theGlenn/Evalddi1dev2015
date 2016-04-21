@@ -1,30 +1,29 @@
-package com.example.intervenant.myapplication.com.example.intervenant.core.fragments.normal;
+package com.example.intervenant.myapplication.fragments.normal;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.intervenant.myapplication.R;
-import com.example.intervenant.myapplication.com.example.intervenant.core.fragments.widgets.ProductsAdapter;
+import com.example.intervenant.myapplication.model.Product;
+import com.example.intervenant.myapplication.model.ProductProvider;
+import com.example.intervenant.myapplication.fragments.ProductFragment;
+import com.example.intervenant.myapplication.widgets.ProductsAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ProductGridFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ProductGridFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ProductGridFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
 
-    private OnFragmentInteractionListener mListener;
+
+
+public class ProductGridFragment extends ProductFragment implements ProductProvider.ProductProviderListener, AdapterView.OnItemClickListener {
+
     private ProductsAdapter mAdapter;
     private GridView gridView;
+    private ArrayList<Product> mProducts = new ArrayList<>();
 
     public ProductGridFragment() {
         // Required empty public constructor
@@ -41,6 +40,9 @@ public class ProductGridFragment extends Fragment {
         if (getArguments() != null) {
 
         }
+
+        mAdapter = new ProductsAdapter(mProducts);
+        ProductProvider.provideFromServer(getContext(), this);
     }
 
     @Override
@@ -49,21 +51,23 @@ public class ProductGridFragment extends Fragment {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_product_grid, container, false);
         gridView = (GridView) v.findViewById(R.id.product_grid);
-        gridView.setAdapter(new ProductsAdapter());
+        gridView.setAdapter(mAdapter);
+        gridView.setOnItemClickListener(this);
 
         return v;
     }
 
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*if (context instanceof OnFragmentInteractionListener) {
-            //mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnProductItemClickListener) {
+            mListener = (OnProductItemClickListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }*/
+        }
     }
 
     @Override
@@ -72,8 +76,16 @@ public class ProductGridFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onProducts(List<Product> products) {
+        mAdapter.update(products);
     }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Product product = mProducts.get(i);
+        mListener.onProductItemSelected(product, (ProductsAdapter.ViewHolder) view.getTag());
+    }
+
+
 }
