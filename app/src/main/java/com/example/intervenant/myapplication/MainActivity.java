@@ -1,6 +1,7 @@
 package com.example.intervenant.myapplication;
 
 import android.net.Uri;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +23,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(new MyAppPagerAdapter(getSupportFragmentManager()));
+
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
     @Override
     public void onClick(View view) {

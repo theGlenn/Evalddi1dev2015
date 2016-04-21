@@ -7,15 +7,21 @@
         android:id="@+id/food_img"
         android:src="@drawable/almond"
         android:layout_width="60dp"
-        android:layout_height="60dp" />
+        android:layout_height="60dp"
+        android:layout_marginTop="51dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
     <TextView
         android:text="Sample"
         android:id="@+id/food_text"
-        android:layout_marginLeft="12dp"
         android:layout_gravity="center"
         android:textSize="25sp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/food_img"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center" />
 
 
 </RelativeLayout>
