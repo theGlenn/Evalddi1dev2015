@@ -18,7 +18,8 @@ import com.android.volley.Response;
 import com.bumptech.glide.Glide;
 import com.example.intervenant.myapplication.R;
 import com.example.intervenant.myapplication.com.example.intervenant.core.Food;
-import com.example.intervenant.myapplication.com.example.intervenant.core.ProductProvider;
+import com.example.intervenant.myapplication.com.example.intervenant.core.FoodProvider;
+import com.example.intervenant.myapplication.com.example.intervenant.core.FoodProvider;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -81,7 +82,7 @@ public class GriedViewFragment extends Fragment {
             list = new ArrayList<>();
             position = getArguments().getInt(POSITION);
 
-            ProductProvider.provideFromServer(getContext(), new Response.Listener<JSONObject>() {
+            FoodProvider.provideFromServer(getContext(), new Response.Listener<JSONObject>() {
 
                 @Override
                 public void onResponse(JSONObject response) {
@@ -101,6 +102,8 @@ public class GriedViewFragment extends Fragment {
                 }
 
             });
+
+            adapter = new GridAdapter(list);
 
         }
 

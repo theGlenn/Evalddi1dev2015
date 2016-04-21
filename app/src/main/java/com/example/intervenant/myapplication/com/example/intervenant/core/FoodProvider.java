@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by intervenant on 18/04/16.
  */
-public class ProductProvider {
+public class FoodProvider {
 
     /*public static  ArrayList<Food> provideFromServer(){
         ArrayList<Food> list = new ArrayList<>();
