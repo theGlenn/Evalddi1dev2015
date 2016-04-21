@@ -49,7 +49,9 @@ public class Fragment1 extends Fragment implements AdapterView.OnItemClickListen
     private OnFragmentInteractionListener mListener;
 
     GridView gridView;
+    ListView listView;
     ListAdapter adapter;
+    ListAdapter listviewadapter;
 
     ArrayList<Product> list;
     private int listType;
@@ -88,6 +90,7 @@ public class Fragment1 extends Fragment implements AdapterView.OnItemClickListen
             }
 
             adapter = new ListAdapter(list);
+            listviewadapter = new ListAdapter(list);
         }
     }
 
@@ -100,6 +103,10 @@ public class Fragment1 extends Fragment implements AdapterView.OnItemClickListen
         gridView = (GridView)view.findViewById(R.id.gridView);
         gridView.setOnItemClickListener(this);
         gridView.setAdapter(adapter);
+
+        listView = (ListView)view.findViewById(R.id.listView);
+        listView.setOnItemClickListener(this);
+        listView.setAdapter(listviewadapter);
 
         return view;
     }
@@ -120,12 +127,18 @@ public class Fragment1 extends Fragment implements AdapterView.OnItemClickListen
 
                     ArrayList<Product> array = gson.fromJson(json.toString(), listType);
 
+                    listView.setVisibility(View.GONE);
+                    gridView.setVisibility(View.VISIBLE);
+
                     adapter.update(array);
                 }
             });
 
         } else {
-            adapter.update(ProductProvider.provideFromCart(this.getContext()));
+
+            listviewadapter.update(ProductProvider.provideFromCart(this.getContext()));
+            listView.setVisibility(View.VISIBLE);
+            gridView.setVisibility(View.GONE);
         }
     }
 

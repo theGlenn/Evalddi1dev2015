@@ -11,4 +11,11 @@
         android:numColumns="3"
         android:layout_gravity="top|left|center" />
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_gravity="top|left|center"
+        android:visibility="gone"/>
+
 </FrameLayout>
