@@ -87,10 +87,13 @@ public class GridViewFragment extends Fragment implements AdapterView.OnItemClic
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
 
                 });
+            }else {
+
+                // TODO : WIP Not Working - This function has to retrive the saved data...
+               // ArrayList<Product> cartList = ProductProvider.Load(getActivity());
             }
         }
         adapter = new GridBaseAdapter(list);
