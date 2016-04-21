@@ -1,8 +1,10 @@
 package com.example.intervenant.myapplication.com.example.intervenant.core.fragments;
 
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -81,9 +83,7 @@ public class MGridViewFragment extends Fragment implements AdapterView.OnItemCli
                         json = response.optJSONArray("data");
 
                         Type gridType = new TypeToken<List<Product>>(){}.getType();
-
                         ArrayList<Product> data  = gson.fromJson(json.toString(), gridType);
-
                         list.clear();
                         list.addAll(data);
                         adapter.notifyDataSetChanged();
@@ -91,7 +91,19 @@ public class MGridViewFragment extends Fragment implements AdapterView.OnItemCli
                     }
                 });
             }else{
-                list = ProductProvider.provideFromFavorite();
+//                String json = ProductProvider.provideFromCart(getContext());
+//                if(json != null) {
+//                    Log.i("cart 3", "[" + json + "]");
+//                    Gson gson = new Gson();
+//                    Type gridType = new TypeToken<List<Product>>(){}.getType();
+//                    ArrayList<Product> data  = gson.fromJson(json, gridType);
+//                    list.clear();
+//                    list.addAll(data);
+//                    adapter.notifyDataSetChanged();
+//                } else {
+//                    Log.i("cart 3", "null");
+//                }
+
                 this.setHasOptionsMenu(true);
             }
 
@@ -206,7 +218,7 @@ public class MGridViewFragment extends Fragment implements AdapterView.OnItemCli
             }
 
             holder.textName.setText(product.name);
-            holder.textPrice.setText("$" + product.price);
+            holder.textPrice.setText(product.price);
             Glide.with(parent.getContext()).load(product.image).into(holder.imgView);
 
 

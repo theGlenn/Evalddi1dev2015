@@ -1,15 +1,25 @@
 package com.example.intervenant.myapplication.com.example.intervenant.core;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.intervenant.myapplication.R;
+import com.google.gson.Gson;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Created by avanderpotte on 21/04/16.
@@ -47,6 +57,31 @@ public class DetailActivity extends AppCompatActivity {
             ImageView imageView = (ImageView)findViewById(R.id.imageView);
             Glide.with(getBaseContext()).load(product.image).into(imageView);
         }
+
+        final Button button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                addToCart(product);
+            }
+        });
+    }
+
+    private void addToCart(Product product) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(product);
+
+        SharedPreferences mPrefs = getSharedPreferences("data", 0);
+        String lastProducts = mPrefs.getString("cartProducts", "");
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        if(lastProducts != "") {
+            prefsEditor.putString("cartProducts", lastProducts + "," + json);
+        } else {
+            prefsEditor.putString("cartProducts", json);
+        }
+        prefsEditor.commit();
+
+        Toast.makeText(this, "Product added to your cart", Toast.LENGTH_SHORT).show();
     }
 
     @Override
