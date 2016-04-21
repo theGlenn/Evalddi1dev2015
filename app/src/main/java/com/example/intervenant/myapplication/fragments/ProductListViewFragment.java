@@ -2,6 +2,7 @@ package com.example.intervenant.myapplication.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -24,6 +26,8 @@ import com.example.intervenant.myapplication.R;
 import com.example.intervenant.myapplication.com.example.intervenant.core.ProductProvider;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -65,19 +69,17 @@ public class ProductListViewFragment extends Fragment implements AdapterView.OnI
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        sharedPref = getActivity().getSharedPreferences("products", Context.MODE_PRIVATE);
         editor     = sharedPref.edit();
 
         //Retrive cart
-        Gson gson = new Gson();
-        String json = sharedPref.getString("cart", "");
-        ArrayList<Product> cartList = gson.fromJson(json, ArrayList.class);
+        ArrayList<Product> cartList = null;
 
-        if(cartList == null) {
-            cartList = new ArrayList<Product>();
+        try {
+            cartList = ProductProvider.provideFromBasket(sharedPref);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
-        Log.v("cart", String.valueOf(cartList));
 
         if (getArguments() != null) {
             list = new ArrayList<>();
@@ -92,7 +94,7 @@ public class ProductListViewFragment extends Fragment implements AdapterView.OnI
                     }
                 });
             }else{
-                list = ProductProvider.provideFromBasket();
+                list = new ArrayList<Product>(cartList);
             }
 
             adapter = new ProductListAdapter(list, cartList);
@@ -117,8 +119,7 @@ public class ProductListViewFragment extends Fragment implements AdapterView.OnI
         if (context instanceof OnFragmentListInteractionListener) {
             mListener = (OnFragmentListInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -147,8 +148,6 @@ public class ProductListViewFragment extends Fragment implements AdapterView.OnI
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentListInteractionListener {
-        void onFragmentInteraction(Product product);
-
         void onFragmentListInteraction(Product product);
     }
 
@@ -171,19 +170,34 @@ public class ProductListViewFragment extends Fragment implements AdapterView.OnI
         public View getView(int i, View view, ViewGroup parent) {
 
             final Product product = getItem(i);
+            product.inCart = isInCart(product, cartList);
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-            ViewHolder holder;
+            final ViewHolder holder;
             if(view == null){
                 holder = new ViewHolder();
                 view = inflater.inflate(R.layout.fragment_item, parent, false);
                 holder.textView  = (TextView) view.findViewById(R.id.productName);
                 holder.imgView = (ImageView) view.findViewById(R.id.productImage);
-                holder.button = (Button) view.findViewById(R.id.button);
+                holder.button = (TextView) view.findViewById(R.id.button);
+
+                if(product.inCart) {
+                    holder.button.setText("-");
+                    holder.button.setBackgroundColor(Color.RED);
+                }
 
                 holder.button.setOnClickListener(new View.OnClickListener() {
+                    @Override
                     public void onClick(View v) {
-                        addToCart(product);
+                        if(product.inCart) {
+                            removeFromCart(product);
+                            adapter.notifyDataSetChanged();
+                        }
+                        else {
+                            addToCart(product);
+                            holder.button.setText("-");
+                            holder.button.setBackgroundColor(Color.RED);
+                        }
                     }
                 });
 
@@ -213,9 +227,9 @@ public class ProductListViewFragment extends Fragment implements AdapterView.OnI
         }
 
         public class ViewHolder {
-            TextView textView;
             ImageView imgView;
-            Button button;
+            TextView textView;
+            TextView button;
         }
 
         public void addToCart(Product product) {
@@ -225,6 +239,31 @@ public class ProductListViewFragment extends Fragment implements AdapterView.OnI
             String json = gson.toJson(cartList);
             editor.putString("cart", json);
             editor.commit();
+        }
+
+        public void removeFromCart(Product product) {
+            cartList.remove(product);
+
+            for(Product item : list) {
+                if(item.name == product.name) {
+                    list.remove(item);
+                }
+            }
+
+            Gson gson = new Gson();
+            String json = gson.toJson(cartList);
+            editor.putString("cart", json);
+            editor.commit();
+        }
+
+        private Boolean isInCart(Product product, ArrayList<Product> cartList) {
+            Boolean isIn = false;
+
+            for(int i = 0; i < cartList.size(); i++) {
+                isIn = isIn ? isIn : product.name.equals(cartList.get(i).name);
+            }
+
+            return isIn;
         }
     }
 }

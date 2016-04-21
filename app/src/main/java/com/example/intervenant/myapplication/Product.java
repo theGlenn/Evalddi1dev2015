@@ -8,11 +8,13 @@ public class Product {
     public String image;
     public String info;
     public String price;
+    public Boolean inCart;
 
     public Product(String name, String image, String price, String info){
         this.name = name;
         this.image = image;
         this.info = info;
+        this.inCart = false;
     }
 
     public static Product instantiate(String name, String image, String price, String info){

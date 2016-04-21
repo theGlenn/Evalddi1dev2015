@@ -32,17 +32,6 @@ public class MainActivity extends AppCompatActivity implements ProductListViewFr
     }
 
     @Override
-    public void onFragmentInteraction(Product product) {
-        Intent detailIntent = new Intent(this, DetailActivity.class);
-        detailIntent.putExtra("name", product.name);
-        detailIntent.putExtra("image", product.image);
-        detailIntent.putExtra("price", product.price);
-        detailIntent.putExtra("info", product.info);
-
-        startActivity(detailIntent);
-    }
-
-    @Override
     public void onFragmentListInteraction(Product product) {
         Intent detailIntent = new Intent(this, DetailActivity.class);
         detailIntent.putExtra("name", product.name);
