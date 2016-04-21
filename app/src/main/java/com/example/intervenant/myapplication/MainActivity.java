@@ -1,6 +1,7 @@
 package com.example.intervenant.myapplication;
 
 import android.net.Uri;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,9 +13,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.intervenant.myapplication.com.example.intervenant.core.fragments.GriedViewFragment;
+import com.example.intervenant.myapplication.com.example.intervenant.core.fragments.ListViewFragment;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, GriedViewFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, GriedViewFragment.OnFragmentInteractionListener, ListViewFragment.OnFragmentInteractionListener {
 
     ViewPager viewPager;
 
@@ -25,6 +27,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(new MyAppPagerAdapter(getSupportFragmentManager()));
+
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -44,13 +49,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         @Override
+        public CharSequence getPageTitle(int position) {
+            return position== 0 ? "Grid" : "List";
+        }
+
+        @Override
         public Fragment getItem(int position) {
-            return GriedViewFragment.newInstance(position);
+            return position== 0 ? GriedViewFragment.newInstance(position) : ListViewFragment.newInstance(position);
+
         }
 
         @Override
         public int getCount() {
-            return 1;
+            return 2;
         }
     }
 
