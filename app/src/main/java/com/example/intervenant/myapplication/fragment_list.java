@@ -33,7 +33,7 @@ import java.util.ArrayList;
  * Use the {@link fragment_list#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class fragment_list extends Fragment {
+public class fragment_list extends Fragment implements AdapterView.OnItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     // TODO: Rename and change types of parameters
@@ -43,6 +43,7 @@ public class fragment_list extends Fragment {
 
     ListView listView;
     ListTestAdapter adapter;
+    GridView gridView;
 
     ArrayList<Food> list;
 
@@ -88,9 +89,11 @@ public class fragment_list extends Fragment {
                             for (int a = 0; a < jsonarray.length(); a++) {
                                 String name = jsonarray.getJSONObject(a).getString("name");
                                 String imageUrl = jsonarray.getJSONObject(a).getString("image");
+                                String info = jsonarray.getJSONObject(a).getString("info");
+                                int price = jsonarray.getJSONObject(a).getInt("price");
 
-                                System.out.println(name + " -- " + imageUrl);
-                                list.add(new Food(name, imageUrl));
+                                System.out.println(name + " -- " + imageUrl + " -- " + info + " -- " + price);
+                                list.add(new Food(name, imageUrl, info, price));
                             }
                             adapter.notifyDataSetChanged();
 
@@ -120,9 +123,8 @@ public class fragment_list extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fragment_list, container, false);
 
-        // recycler
-        // recup id + setadapter
-        GridView gridView =  (GridView) view.findViewById(R.id.gridView);
+        gridView =  (GridView) view.findViewById(R.id.gridView);
+        gridView.setOnItemClickListener(this);
         gridView.setAdapter(adapter);
 
         return view;
@@ -146,18 +148,18 @@ public class fragment_list extends Fragment {
         mListener = null;
     }
 
-    /*
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Food food =  adapter.getItem(i);
         if (mListener != null) {
-            mListener.onFragmentListInteraction(food);
+            mListener.OnFragmentInteraction(food);
         }
     }
-    */
+
+
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        //void onFragmentInteraction(Food food);
+        void OnFragmentInteraction(Food food);
     }
 
 

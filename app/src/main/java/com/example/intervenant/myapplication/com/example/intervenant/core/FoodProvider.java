@@ -8,8 +8,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.intervenant.myapplication.R;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by Quentin on 21/04/16.
@@ -33,4 +36,16 @@ public class FoodProvider {
         queue.add(jsObjRequest);
 
     }
+
+    // for cart
+    /*
+    public static ArrayList<FoodFavorite> provideFromFavorite(){
+        ArrayList<FoodFavotie> list = new ArrayList<>();
+
+        return list;
+    }
+    */
+
+
+
 }

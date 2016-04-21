@@ -30,14 +30,17 @@ public class MainActivity extends AppCompatActivity implements fragment_list.OnF
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    //@Override
-    //public void onFragmentListInteraction() {
-        //Food food
-        //Intent detailIntent = new Intent(this, DetailActivity.class);
-        //detailIntent.putExtra("name", food.name);
 
-        //startActivity(detailIntent);
-    //}
+    @Override
+    public void OnFragmentInteraction(Food food) {
+        Intent detailIntent = new Intent(this, DetailActivity.class);
+        detailIntent.putExtra("name", food.name);
+        detailIntent.putExtra("image", food.img);
+        detailIntent.putExtra("info", food.info);
+        detailIntent.putExtra("price", food.price);
+
+        startActivity(detailIntent);
+    }
 
 
     public class ListPagerAdapter extends FragmentPagerAdapter{
@@ -50,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements fragment_list.OnF
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return position== 0 ? "All food" : "Favorites";
+            return position== 0 ? "All food" : "Cart";
         }
 
         @Override
