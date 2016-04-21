@@ -1,11 +1,11 @@
 package com.example.intervenant.myapplication;
 
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+
+import com.example.intervenant.myapplication.com.example.intervenant.core.fragments.widgets.ProductsFragmentAdapter;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -17,7 +17,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        viewPager = findViewById(R.id.pager);
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(new ProductsFragmentAdapter(getSupportFragmentManager()));
     }
 
     @Override
