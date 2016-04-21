@@ -22,19 +22,24 @@ public class MyApp {
         return ourInstance;
     }
 
-    public ArrayList<Product> productsInCart = new ArrayList<Product>();
+    public ArrayList<Product> productsInCart;
     public ArrayList<Product> allProducts;
 
     private MyApp() {
 
     }
 
+    public void restoreCart (Context ctx) {
+        productsInCart = ProductProvider.restoreCart(ctx);
+    }
+
     public ArrayList<Product> getProductsInCart () {
         return productsInCart;
     }
 
-    public void addProductToCart (Product product) {
+    public void addProductToCart (Context ctx, Product product) {
         productsInCart.add(product);
+        ProductProvider.saveCart(ctx, productsInCart);
     }
 
     public void getAllProducts (Context context, final MyApp.Listener callback) {
@@ -55,6 +60,5 @@ public class MyApp {
     public interface Listener {
         void onAllProductsLoaded(ArrayList<Product> products);
     }
-
 
 }

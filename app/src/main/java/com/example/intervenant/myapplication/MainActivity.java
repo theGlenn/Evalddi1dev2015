@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements ProductGridFragme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyApp.getInstance().restoreCart(this);
+
         setContentView(R.layout.activity_main);
 
         pager = (ViewPager) findViewById(R.id.pager);

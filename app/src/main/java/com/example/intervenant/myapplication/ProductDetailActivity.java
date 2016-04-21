@@ -54,7 +54,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             if (button != null) {
                 button.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        MyApp.getInstance().addProductToCart(product);
+                        MyApp.getInstance().addProductToCart(getBaseContext(), product);
                     }
                 });
             }
