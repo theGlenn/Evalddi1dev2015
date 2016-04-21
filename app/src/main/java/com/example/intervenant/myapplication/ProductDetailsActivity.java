@@ -1,5 +1,6 @@
 package com.example.intervenant.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -58,6 +59,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     list.add(product);
 
                     MyApp.getInstance().setCartList(list);
+
+                    startActivity(new Intent(getBaseContext(), MainActivity.class));
+                    finish();
                 }
             });
 

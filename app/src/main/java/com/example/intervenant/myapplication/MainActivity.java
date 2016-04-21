@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        //ViewPager ! :)
         viewPager = (ViewPager) findViewById(R.id.pager);
 
         adapterViewPager = new ProductsFragmentAdapter(getSupportFragmentManager());

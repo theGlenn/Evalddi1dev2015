@@ -7,4 +7,10 @@
     <string name="add_to_cart">Add to Cart</string>
     <string name="remove_from_cart">X</string>
 
+    <string name="checkOut">Proceed to Checkout</string>
+    <string name="checkout_title">Checkout</string>
+    <string name="checkout_price">Total to pay:\u0020$</string>
+    <string name="pay">Pay</string>
+
+
 </resources>

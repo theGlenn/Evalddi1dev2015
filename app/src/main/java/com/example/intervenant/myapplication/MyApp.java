@@ -33,4 +33,8 @@ public class MyApp extends Application {
     public void removeInCartList(int i) {
         this.cartList.remove(i);
     }
+
+    public void clearCartList() {
+        this.cartList.clear();
+    }
 }

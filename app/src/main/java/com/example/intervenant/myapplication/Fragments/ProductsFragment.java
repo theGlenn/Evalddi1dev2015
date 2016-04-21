@@ -7,16 +7,21 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.example.intervenant.myapplication.Adapters.CartListAdapter;
 import com.example.intervenant.myapplication.Adapters.ProductsGridAdapter;
+import com.example.intervenant.myapplication.CheckoutActivity;
 import com.example.intervenant.myapplication.MyApp;
 import com.example.intervenant.myapplication.Product;
 import com.example.intervenant.myapplication.ProductDetailsActivity;
@@ -86,6 +91,7 @@ public class ProductsFragment extends Fragment {
             mParam1 = getArguments().getInt(ARG_PARAM1);
 
             if (mParam1 == 0) {
+
                 ProductProvider.provideFromServer(getContext(), new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -106,6 +112,9 @@ public class ProductsFragment extends Fragment {
 
                 adapter = new ProductsGridAdapter(getContext(), productsList);
             } else {
+
+                setHasOptionsMenu(true);
+
                 cartList = new ArrayList<>();
                 cartList.addAll(MyApp.getInstance().getCartList());
 
@@ -153,6 +162,28 @@ public class ProductsFragment extends Fragment {
         }
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // TODO Add your menu entries here
+
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.cart_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.add:
+
+                startActivity(new Intent(getActivity(), CheckoutActivity.class));
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void updateCart(){
