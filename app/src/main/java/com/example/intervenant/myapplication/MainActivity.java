@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.intervenant.myapplication.com.example.intervenant.core.Fragment1;
 import com.example.intervenant.myapplication.com.example.intervenant.core.Product;
+import com.example.intervenant.myapplication.com.example.intervenant.core.ProductProvider;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Fragment1.OnFragmentInteractionListener {

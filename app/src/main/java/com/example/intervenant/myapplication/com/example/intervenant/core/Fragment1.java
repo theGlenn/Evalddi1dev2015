@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.bumptech.glide.Glide;
+import com.example.intervenant.myapplication.ProductDetail;
 import com.example.intervenant.myapplication.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -198,7 +200,7 @@ public class Fragment1 extends Fragment implements AdapterView.OnItemClickListen
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup parent) {
+        public View getView(int i, View view, final ViewGroup parent) {
 
             Product product = getItem(i);
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -206,10 +208,34 @@ public class Fragment1 extends Fragment implements AdapterView.OnItemClickListen
             ViewHolder holder;
             if(view == null){
                 holder = new ViewHolder();
-                view = inflater.inflate(R.layout.list_item, parent, false);
+                if(listType == 0) {
+                    view = inflater.inflate(R.layout.grid_item, parent, false);
+                }
+                else {
+                    view = inflater.inflate(R.layout.list_item, parent, false);
+                    holder.button = (Button) view.findViewById(R.id.cartButton);
+                }
                 holder.textView  = (TextView) view.findViewById(R.id.text);
                 holder.imgView = (ImageView) view.findViewById(R.id.img);
                 view.setTag(holder);
+
+                if(listType == 1) {
+
+                    holder.button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            View parentRow = (View) view.getParent();
+                            ListView listView = (ListView) parentRow.getParent();
+                            final int position = listView.getPositionForView(parentRow);
+
+                            mList.remove(position);
+
+                            update();
+                            ProductProvider.removeProductFromCart(getContext(), position);
+
+                        }
+                    });
+                }
             }else{
                 holder = (ViewHolder) view.getTag();
             }
@@ -226,6 +252,10 @@ public class Fragment1 extends Fragment implements AdapterView.OnItemClickListen
             this.notifyDataSetChanged();
         }
 
+        public void update() {
+            this.notifyDataSetChanged();
+        }
+
         @Override
         public Product getItem(int i) {
             return mList.get(i);
@@ -239,6 +269,7 @@ public class Fragment1 extends Fragment implements AdapterView.OnItemClickListen
         public class ViewHolder {
             TextView textView;
             ImageView imgView;
+            Button button;
         }
     }
 }

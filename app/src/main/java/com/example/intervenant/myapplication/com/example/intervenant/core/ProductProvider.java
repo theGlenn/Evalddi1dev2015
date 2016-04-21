@@ -63,6 +63,27 @@ public class ProductProvider {
         return list;
     }
 
+    public static void removeProductFromCart(Context ctx, Product f){
+        ArrayList<Product> list = ProductProvider.provideFromCart(ctx);
+        Log.i("remove","before"+list.size());
+        for (int i = 0; i < list.size(); i++) {
+            if(list.get(i).name.equals(f.name)) {
+                list.remove(i);
+                break;
+            }
+        }
+        Log.i("remove","after"+list.size());
+        ProductProvider.saveToMemory(ctx,list);
+    }
+
+    public static void removeProductFromCart(Context ctx, int i){
+        ArrayList<Product> list = ProductProvider.provideFromCart(ctx);
+        Log.i("remove","before"+list.size());
+        list.remove(i);
+        Log.i("remove","after"+list.size());
+        ProductProvider.saveToMemory(ctx,list);
+    }
+
     public static void putProductInCart(Context ctx, Product product){
         ArrayList<Product> list = ProductProvider.provideFromCart(ctx);
 

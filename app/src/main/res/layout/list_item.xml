@@ -1,20 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:layout_height="match_parent">
-    <ImageView
-        android:id="@+id/img"
-        android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="60dp" />
+    android:orientation="horizontal"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_height="60dp"
+            android:layout_weight="0.1"/>
 
-    <TextView
-        android:text="Sample"
-        android:id="@+id/text"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp" />
+        <TextView
+            android:text="Sample"
+            android:id="@+id/text"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"/>
+
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="X"
+            android:id="@+id/cartButton"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:background="@color/DarkRed"
+            android:textColor="@color/White"
+            android:layout_weight="0.1"
+
+            android:textSize="30dp"/>
+
 </LinearLayout>
