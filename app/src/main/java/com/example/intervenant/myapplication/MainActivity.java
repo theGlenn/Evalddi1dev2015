@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return position== 0 ? "Something" : "Some other thing";
+            return position== 0 ? "Products" : "Basket";
         }
 
     }

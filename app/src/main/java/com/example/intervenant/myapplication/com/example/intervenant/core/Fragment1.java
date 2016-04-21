@@ -125,7 +125,7 @@ public class Fragment1 extends Fragment implements AdapterView.OnItemClickListen
             });
 
         } else {
-            adapter.update(ProductProvider.provideFromFavorite(this.getContext()));
+            adapter.update(ProductProvider.provideFromCart(this.getContext()));
         }
     }
 

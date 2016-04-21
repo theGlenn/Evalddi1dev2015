@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -33,7 +35,6 @@ public class ProductDetail extends AppCompatActivity {
             String info  = intent.getStringExtra("info");
 
             product = new Product(name, Float.parseFloat(price), info, image);
-            //product.favorite = ProductProvider.isInFavorite(this,fruit);
             TextView nameView = (TextView)findViewById(R.id.name);
             nameView.setText(product.name);
             TextView priceView = (TextView)findViewById(R.id.price);
@@ -43,24 +44,17 @@ public class ProductDetail extends AppCompatActivity {
             ImageView imageView = (ImageView)findViewById(R.id.image);
             Glide.with(this).load(product.getImageUrl()).into(imageView);
 
-        }
-
-        /*Switch mySwitch = (Switch) findViewById(R.id.switch1);
-        if (mySwitch != null) {
-            mySwitch.setChecked(fruit.favorite);
-            mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked) {
-                        Log.i("check","Wasn't checked");
-                        fruit.favorite = false;
-                        FruitProvider.putFruitInFavorite(DetailActivity.this,fruit);
-                    } else {
-                        Log.i("check","Was checked");
-                        fruit.favorite = true;
-                        FruitProvider.removeFruitFromFavorite(DetailActivity.this,fruit);
+            Button button = (Button) findViewById(R.id.cartButton);
+            if (button != null) {
+                //button.setChecked(product.favorite);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ProductProvider.putProductInCart(ProductDetail.this,product);
                     }
-                }
-            });
-        }*/
+                });
+            }
+
+        }
     }
 }
