@@ -29,4 +29,8 @@ public class MyApp extends Application {
     public void setCartList(ArrayList<Product> list) {
         this.cartList = list;
     }
+
+    public void removeInCartList(int i) {
+        this.cartList.remove(i);
+    }
 }

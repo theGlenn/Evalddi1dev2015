@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 
@@ -52,8 +54,8 @@ public class ProductsFragment extends Fragment {
     ListView listView;
     ProductsGridAdapter adapter;
     CartListAdapter cartListAdapter;
-    List<Product> productsList = new ArrayList<>();
-    List<Product> cartList = new ArrayList<>();
+    ArrayList<Product> productsList = new ArrayList<>();
+    ArrayList<Product> cartList = new ArrayList<>();
 
     public ProductsFragment() {
         // Required empty public constructor
@@ -125,7 +127,6 @@ public class ProductsFragment extends Fragment {
                 gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        // TODO: ADD PRODUCT DETAILS
                         Product product = adapter.getItem(i);
 
                         Intent intent = new Intent(getActivity(), ProductDetailsActivity.class);
@@ -142,22 +143,29 @@ public class ProductsFragment extends Fragment {
         } else {
             listView = (ListView) view.findViewById(R.id.listView);
             listView.setVisibility(View.VISIBLE);
-            listView.setAdapter(cartListAdapter);
+
+
+
+            if (listView != null) {
+                listView.setAdapter(cartListAdapter);
+            }
+
         }
 
         return view;
+    }
+
+    public void updateCart(){
+        cartList.clear();
+        cartList.addAll(MyApp.getInstance().getCartList());
+        cartListAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (mParam1 == 1) {
-
-            ArrayList<Product> newCartList = MyApp.getInstance().getCartList();
-
-            cartList.clear();
-            cartList.addAll(newCartList);
-            cartListAdapter.notifyDataSetChanged();
+            updateCart();
         }
     }
 
