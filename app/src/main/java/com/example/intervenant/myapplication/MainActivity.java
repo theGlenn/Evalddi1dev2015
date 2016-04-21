@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.example.intervenant.myapplication.fragments.ProductListViewFragment;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements ProductListViewFragment.OnFragmentListInteractionListener {
 
     ViewPager viewPager;
 
@@ -32,11 +32,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View view) {
+    public void onFragmentInteraction(Product product) {
+        Intent detailIntent = new Intent(this, DetailActivity.class);
+        detailIntent.putExtra("name", product.name);
+        detailIntent.putExtra("image", product.image);
+        detailIntent.putExtra("price", product.price);
+        detailIntent.putExtra("info", product.info);
 
+        startActivity(detailIntent);
     }
 
-    /*@Override
+    @Override
     public void onFragmentListInteraction(Product product) {
         Intent detailIntent = new Intent(this, DetailActivity.class);
         detailIntent.putExtra("name", product.name);
@@ -45,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         detailIntent.putExtra("info", product.info);
 
         startActivity(detailIntent);
-    }*/
+    }
 
     public class ListPagerAdapter extends FragmentPagerAdapter {
 
