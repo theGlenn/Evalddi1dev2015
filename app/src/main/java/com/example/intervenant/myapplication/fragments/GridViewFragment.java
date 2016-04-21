@@ -7,11 +7,23 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.bumptech.glide.Glide;
+import com.example.intervenant.myapplication.Product;
 import com.example.intervenant.myapplication.R;
+import com.example.intervenant.myapplication.fragments.Providers.ProductProvider;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,35 +33,21 @@ import com.example.intervenant.myapplication.R;
  * Use the {@link GridViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GridViewFragment extends Fragment {
+public class GridViewFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     GridBaseAdapter adapter;
     GridView gridView;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    ArrayList<Product> list;
+    private int gridType;
+
     private static final String ARG_TYPE = "GridType";
-   // private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     public GridViewFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GridViewFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static GridViewFragment newInstance(int type) {
         GridViewFragment fragment = new GridViewFragment();
         Bundle args = new Bundle();
@@ -62,43 +60,63 @@ public class GridViewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
+        list = new ArrayList<>();
 
-        adapter = new GridBaseAdapter();
+        if (getArguments() != null) {
+            gridType = getArguments().getInt(ARG_TYPE);
 
+            if (gridType == 0) {
+                ProductProvider.provideFromServer(getActivity(), new Response.Listener<JSONObject>(){
+
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            JSONArray jsonarray = response.getJSONArray("data");
+                            for (int a = 0; a < jsonarray.length(); a++) {
+                                String name = jsonarray.getJSONObject(a).getString("name");
+                                String info = jsonarray.getJSONObject(a).getString("info");
+                                String image = jsonarray.getJSONObject(a).getString("image");
+                                String strPrice = jsonarray.getJSONObject(a).getString("price");
+
+                                Float price = Float.parseFloat(strPrice);
+
+                                list.add(new Product(name, info, image, price));
+                            }
+                            adapter.notifyDataSetChanged();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                });
+            }
+        }
+        adapter = new GridBaseAdapter(list);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        //View view =inflater.inflate(R.layout.fragment_mlist_view, container, false);
         View view = inflater.inflate(R.layout.fragment_grid_view, container, false);
         gridView = (GridView) view.findViewById(R.id.gridview);
+        gridView.setOnItemClickListener(this);
         gridView.setAdapter(adapter);
+
         // Inflate the layout for this fragment
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*if (context instanceof OnFragmentInteractionListener) {
+        if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }*/
+        }
     }
 
     @Override
@@ -107,31 +125,35 @@ public class GridViewFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Product product =  adapter.getItem(i);
+        if (mListener != null) {
+            mListener.onFragmentInteraction(product);
+        }
     }
+
+    public interface OnFragmentInteractionListener {
+        void onFragmentInteraction(Product product);
+    }
+
 
     public class GridBaseAdapter extends BaseAdapter {
 
-        @Override
-        public int getCount() {
-            return 10;
+        ArrayList<Product> mList;
+
+        GridBaseAdapter(ArrayList<Product> list){
+            mList = list;
         }
 
         @Override
-        public String getItem(int i) {
-            return "Item" + i;
+        public int getCount() {
+            return list.size();
+        }
+
+        @Override
+        public Product getItem(int i) {
+            return mList.get(i);
         }
 
         @Override
@@ -142,13 +164,41 @@ public class GridViewFragment extends Fragment {
         @Override
         public View getView(int i, View view, ViewGroup parent) {
 
+            Product product = getItem(i);
             LayoutInflater inflater =(LayoutInflater) LayoutInflater.from(parent.getContext());
 
-            view = inflater.inflate(R.layout.grid_fragment_item, parent, false);
-            TextView textView = (TextView) view.findViewById(R.id.product_text);
 
-            textView.setText(getItem(i));
+
+            ViewHolder holder;
+            if(view == null){
+                holder = new ViewHolder();
+                view = inflater.inflate(R.layout.grid_fragment_item, parent, false);
+                holder.nameText  = (TextView) view.findViewById(R.id.product_text);
+                holder.priceText  = (TextView) view.findViewById(R.id.gridPrice);
+                holder.imageView = (ImageView) view.findViewById(R.id.productImage);
+                view.setTag(holder);
+            }else{
+                holder = (ViewHolder) view.getTag();
+            }
+
+            holder.nameText.setText(product.getName());
+            holder.priceText.setText(product.getPrice().toString() + " $");
+
+            if(product.getImage() != null) {
+                Glide.with(parent.getContext())
+                        .load(product.getImage())
+                        .into(holder.imageView);
+            }
+
             return view;
+
+        }
+
+        public class ViewHolder {
+            TextView nameText;
+            TextView priceText;
+            ImageView imageView;
         }
     }
+
 }

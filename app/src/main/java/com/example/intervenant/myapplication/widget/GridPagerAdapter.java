@@ -18,13 +18,11 @@ public class GridPagerAdapter  extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-       // return super.getPageTitle(" Mon Titre " + position);
-        return (" Mon Titre " + position);
+        return position== 0 ? "All Products" : "My Cart";
     }
 
     @Override
     public Fragment getItem(int position) {
-        //MListViewFragment.newInstance(position)
         return GridViewFragment.newInstance(position);
     }
 
