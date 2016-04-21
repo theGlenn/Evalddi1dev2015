@@ -88,4 +88,18 @@ public class FoodProvider {
 
 
     // TODO Remove
+    public static void removeFoodFromFavorite(Context ctx, Food f){
+        ArrayList<Food> list = FoodProvider.provideFromFavorite(ctx);
+        Log.i("remove","before"+list.size());
+        for (int i = 0; i < list.size(); i++) {
+            if(list.get(i).name.equals(f.name)) {
+                list.remove(i);
+                break;
+            }
+        }
+        Log.i("remove","after"+list.size());
+        FoodProvider.saveToMemory(ctx,list);
+    }
+
+
 }

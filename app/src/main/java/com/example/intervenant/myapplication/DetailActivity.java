@@ -73,6 +73,17 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+        final FloatingActionButton buttonremove = (FloatingActionButton) this.findViewById(R.id.buttonRemoveCart);
+        assert buttonremove != null;
+        buttonremove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println(food.name);
+                FoodProvider.removeFoodFromFavorite(DetailActivity.this,food);
+
+            }
+        });
+
 
     }
 
