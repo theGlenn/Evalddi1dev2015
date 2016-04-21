@@ -1,6 +1,7 @@
 package com.example.intervenant.myapplication.com.example.intervenant.core.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.intervenant.myapplication.R;
+import com.example.intervenant.myapplication.com.example.intervenant.core.DetailActivity;
 import com.example.intervenant.myapplication.com.example.intervenant.core.Product;
 import com.example.intervenant.myapplication.com.example.intervenant.core.ProductProvider;
 
@@ -33,7 +35,7 @@ public class MListViewFragment extends Fragment implements AdapterView.OnItemCli
     private static final String ARG_PARAM1 = "param1";
     private int listType;
     ArrayList<Product> list;
-    private OnFragmentInteractionListener mListener;
+    private OnFragmentGridInteractionListener mListener;
 
     public MListViewFragment() {
         // Required empty public constructor
@@ -81,14 +83,29 @@ public class MListViewFragment extends Fragment implements AdapterView.OnItemCli
         if(listType == 0){
             view =  inflater.inflate(R.layout.fragment_mgrid_view, container, false);
             GridView gridview = (GridView) view.findViewById(R.id.gridview);
+            gridview.setAdapter(adapter);
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v,
                                         int position, long id) {
-                    Toast.makeText(getContext(), "" + position,
-                            Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(getContext(), "" + position,
+                        Toast.LENGTH_SHORT).show();
+               }
             });
-            gridview.setAdapter(adapter);
+           gridview.setAdapter(adapter);
+            /*gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View v,
+                                        int position, long id) {
+                    Toast.makeText(getContext(), "gridview clicked",
+                            Toast.LENGTH_SHORT).show();
+                    Intent detailIntent = new Intent(getContext(), DetailActivity.class);
+                    detailIntent.putExtra("name", list.get(position).name);
+                    detailIntent.putExtra("image", list.get(position).image);
+                    detailIntent.putExtra("info", list.get(position).info);
+                    detailIntent.putExtra("price", list.get(position).price);
+
+                    startActivity(detailIntent);
+                }
+            });*/
         } else {
             view =  inflater.inflate(R.layout.fragment_mlist_view, container, false);
 
@@ -100,18 +117,11 @@ public class MListViewFragment extends Fragment implements AdapterView.OnItemCli
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnFragmentGridInteractionListener) {
+            mListener = (OnFragmentGridInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -126,12 +136,14 @@ public class MListViewFragment extends Fragment implements AdapterView.OnItemCli
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+        Product obj =  adapter.getItem(i);
+        if (mListener != null) {
+            mListener.onFragmentInteraction(obj);
+        }
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public interface OnFragmentGridInteractionListener {
+        void onFragmentInteraction(Product obj);
     }
 
     private class ProductListGridAdapter extends BaseAdapter {
