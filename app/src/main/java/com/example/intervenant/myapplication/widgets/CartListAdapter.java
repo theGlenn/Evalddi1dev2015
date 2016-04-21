@@ -16,17 +16,28 @@ import java.util.ArrayList;
 /**
  * Created by fmotte on 21/04/16.
  */
-public class ProductGridAdapter extends BaseAdapter {
+public class CartListAdapter extends BaseAdapter {
+
 
     ArrayList<Product> mList;
 
-    public ProductGridAdapter(ArrayList<Product> list){
+    public CartListAdapter(ArrayList<Product> list){
         mList = list;
     }
 
     @Override
     public int getCount() {
         return mList.size();
+    }
+
+    @Override
+    public Product getItem(int i) {
+        return mList.get(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return i;
     }
 
     @Override
@@ -52,16 +63,6 @@ public class ProductGridAdapter extends BaseAdapter {
         Glide.with(parent.getContext()).load(product.image).into(holder.image);
 
         return view;
-    }
-
-    @Override
-    public Product getItem(int i) {
-        return mList.get(i);
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return i;
     }
 
     public class ViewHolder {

@@ -74,7 +74,6 @@ public class ProductGridFragment extends Fragment implements AdapterView.OnItemC
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        //Log.d("myLogs", response.toString());
 
                         Gson gson = new Gson();
                         Type type = new TypeToken<ArrayList<Product>>(){}.getType();

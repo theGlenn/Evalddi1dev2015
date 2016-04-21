@@ -1,9 +1,13 @@
 package com.example.intervenant.myapplication.com.example.intervenant.core;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,15 +18,29 @@ import com.example.intervenant.myapplication.R;
 public class DetailActivity extends AppCompatActivity {
 
     Product product;
+    private Button addToCartButton;
+    private String oldCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        final SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+
+        addToCartButton = (Button) findViewById(R.id.addToCart);
+        addToCartButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                ProductProvider.putProductInCart(getBaseContext(), product);
+            }
+        });
 
         if(intent != null){
 

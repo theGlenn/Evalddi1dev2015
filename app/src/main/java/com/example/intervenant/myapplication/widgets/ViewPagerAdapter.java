@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.intervenant.myapplication.fragments.CartListFragment;
 import com.example.intervenant.myapplication.fragments.ProductGridFragment;
 
 /**
@@ -17,8 +18,14 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-
-        return ProductGridFragment.newInstance(position);
+        switch (position) {
+            case 0:
+                return ProductGridFragment.newInstance(position);
+            case 1:
+                return CartListFragment.newInstance(position);
+            default:
+                return null;
+        }
     }
 
     @Override
