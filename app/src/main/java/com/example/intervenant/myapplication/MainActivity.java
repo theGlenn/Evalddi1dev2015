@@ -1,5 +1,6 @@
 package com.example.intervenant.myapplication;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.intervenant.myapplication.com.example.intervenant.core.Product;
 import com.example.intervenant.myapplication.com.example.intervenant.core.ViewFragment;
 
 
@@ -37,7 +39,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onFragmentInteraction(Product product) {
+        Intent detailIntent = new Intent(this, DetailActivity.class);
+        detailIntent.putExtra("name", product.name);
+        detailIntent.putExtra("info", product.info);
+        detailIntent.putExtra("price", product.price);
+        detailIntent.putExtra("image", product.image);
+
+        startActivity(detailIntent);
 
     }
 
