@@ -4,9 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
 
@@ -35,7 +37,7 @@ import java.util.List;
  */
 public class ProductCartFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
+    private ProductCartFragment.Listener mListener;
 
     ArrayList<Product> list;
     ProductCartListAdapter listAdapter;
@@ -84,8 +86,8 @@ public class ProductCartFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof ProductCartFragment.Listener) {
+            mListener = (ProductCartFragment.Listener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -115,8 +117,8 @@ public class ProductCartFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface Listener {
         // TODO: Update argument type and name
-        // void onFragmentInteraction(Uri uri);
+        // void onFragmentCartInteraction(int position, Product product);
     }
 }

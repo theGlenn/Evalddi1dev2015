@@ -41,7 +41,7 @@ import java.util.ArrayList;
  */
 public class ProductGridFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-    private OnFragmentInteractionListener mListener;
+    private ProductGridFragment.Listener mListener;
 
     ProductGridAdapter gridAdapter;
     GridView gridView;
@@ -99,8 +99,8 @@ public class ProductGridFragment extends Fragment implements AdapterView.OnItemC
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof ProductGridFragment.Listener) {
+            mListener = (ProductGridFragment.Listener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -151,7 +151,7 @@ public class ProductGridFragment extends Fragment implements AdapterView.OnItemC
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface Listener {
         void onFragmentGridInteraction(Product product);
     }
 }

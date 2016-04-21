@@ -57,6 +57,10 @@ public class MyApp {
         }
     }
 
+    public void removeProductAtIndex (int position) {
+        productsInCart.remove(position);
+    }
+
     public interface Listener {
         void onAllProductsLoaded(ArrayList<Product> products);
     }

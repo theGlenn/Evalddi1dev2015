@@ -42,7 +42,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
             TextView price = (TextView)findViewById(R.id.price);
             if (price != null) {
-                price.setText(String.valueOf(product.price) + " €");
+                String textContent = String.valueOf(product.price) + " €";
+                price.setText(textContent);
             }
 
             ImageView image = (ImageView)findViewById(R.id.image);

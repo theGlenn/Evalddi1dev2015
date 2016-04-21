@@ -25,7 +25,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements ProductGridFragment.OnFragmentInteractionListener, ProductCartFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements ProductGridFragment.Listener, ProductCartFragment.Listener {
 
     ViewPager pager;
 

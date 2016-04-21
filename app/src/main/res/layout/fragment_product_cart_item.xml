@@ -30,7 +30,8 @@
             android:layout_height="wrap_content"
             android:text="Delete"
             android:id="@+id/delete"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            android:visibility="invisible" />
     </LinearLayout>
 
 </LinearLayout>
