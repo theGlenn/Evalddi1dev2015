@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
 
 import com.android.volley.Response;
-import com.example.intervenant.myapplication.Adapters.ProductsAdapter;
+import com.example.intervenant.myapplication.Adapters.CartListAdapter;
+import com.example.intervenant.myapplication.Adapters.ProductsGridAdapter;
+import com.example.intervenant.myapplication.MyApp;
 import com.example.intervenant.myapplication.Product;
 import com.example.intervenant.myapplication.ProductDetailsActivity;
 import com.example.intervenant.myapplication.R;
@@ -46,8 +49,11 @@ public class ProductsFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     GridView gridView;
-    ProductsAdapter adapter;
+    ListView listView;
+    ProductsGridAdapter adapter;
+    CartListAdapter cartListAdapter;
     List<Product> productsList = new ArrayList<>();
+    List<Product> cartList = new ArrayList<>();
 
     public ProductsFragment() {
         // Required empty public constructor
@@ -72,29 +78,37 @@ public class ProductsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         if (getArguments() != null) {
             // IF WE NEED TO DIFFERENTIATE TABS
             mParam1 = getArguments().getInt(ARG_PARAM1);
 
-            ProductProvider.provideFromServer(getContext(), new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
+            if (mParam1 == 0) {
+                ProductProvider.provideFromServer(getContext(), new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-                    Gson gson = new Gson();
-                    JSONArray json = response.optJSONArray("data");
+                        Gson gson = new Gson();
+                        JSONArray json = response.optJSONArray("data");
 
-                    Type listType = new TypeToken<List<Product>>() {
-                    }.getType();
+                        Type listType = new TypeToken<List<Product>>() {
+                        }.getType();
 
-                    ArrayList<Product> array = gson.fromJson(json.toString(), listType);
+                        ArrayList<Product> array = gson.fromJson(json.toString(), listType);
 
-                    productsList.clear();
-                    productsList.addAll(array);
-                    adapter.notifyDataSetChanged();
-                }
-            });
+                        productsList.clear();
+                        productsList.addAll(array);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
 
-            adapter = new ProductsAdapter(getContext(), productsList);
+                adapter = new ProductsGridAdapter(getContext(), productsList);
+            } else {
+                cartList = new ArrayList<>();
+                cartList.addAll(MyApp.getInstance().getCartList());
+
+                cartListAdapter = new CartListAdapter(cartList);
+            }
         }
     }
 
@@ -104,27 +118,47 @@ public class ProductsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_products, container, false);
 
-        gridView = (GridView) view.findViewById(R.id.gridView);
-        if (gridView != null) {
-            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    // TODO: ADD PRODUCT DETAILS
-                    Product product = adapter.getItem(i);
+        if (mParam1 == 0) {
 
-                    Intent intent = new Intent(getActivity(), ProductDetailsActivity.class);
-                    intent.putExtra("name", product.getName());
-                    intent.putExtra("price", product.getPrice());
-                    intent.putExtra("info", product.getInfo());
-                    intent.putExtra("image", product.getImage());
+            gridView = (GridView) view.findViewById(R.id.gridView);
+            if (gridView != null) {
+                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        // TODO: ADD PRODUCT DETAILS
+                        Product product = adapter.getItem(i);
 
-                    startActivity(intent);
-                }
-            });
-            gridView.setAdapter(adapter);
+                        Intent intent = new Intent(getActivity(), ProductDetailsActivity.class);
+                        intent.putExtra("name", product.getName());
+                        intent.putExtra("price", product.getPrice());
+                        intent.putExtra("info", product.getInfo());
+                        intent.putExtra("image", product.getImage());
+
+                        startActivity(intent);
+                    }
+                });
+                gridView.setAdapter(adapter);
+            }
+        } else {
+            listView = (ListView) view.findViewById(R.id.listView);
+            listView.setVisibility(View.VISIBLE);
+            listView.setAdapter(cartListAdapter);
         }
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mParam1 == 1) {
+
+            ArrayList<Product> newCartList = MyApp.getInstance().getCartList();
+
+            cartList.clear();
+            cartList.addAll(newCartList);
+            cartListAdapter.notifyDataSetChanged();
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

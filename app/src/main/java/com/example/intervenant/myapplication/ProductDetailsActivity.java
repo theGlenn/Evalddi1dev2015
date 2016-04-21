@@ -1,12 +1,11 @@
 package com.example.intervenant.myapplication;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -45,7 +44,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
             price.setText(priceString);
 
-            if(productInfo != null && !productInfo.isEmpty()) {
+            if (productInfo != null && !productInfo.isEmpty()) {
                 info.setText(product.getInfo());
             } else {
                 info.setText(this.getString(R.string.no_description));
@@ -54,14 +53,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ArrayList<Product> cartList = MyApp.getCartList();
+                    ArrayList<Product> list = MyApp.getInstance().getCartList();
 
-                    cartList.add(product);
+                    list.add(product);
 
-                    MyApp.setCartList(cartList);
-
-                    Log.i("CARTLIST", cartList.toString());
-
+                    MyApp.getInstance().setCartList(list);
                 }
             });
 

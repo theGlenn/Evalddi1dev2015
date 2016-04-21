@@ -18,11 +18,12 @@ import java.util.List;
 /**
  * Created by jfong on 21/04/16.
  */
-public class ProductsAdapter extends BaseAdapter {
+public class ProductsGridAdapter extends BaseAdapter {
+
     private Context mContext;
     private ArrayList<Product> mList;
 
-    public ProductsAdapter(Context ctx, List<Product> list) {
+    public ProductsGridAdapter(Context ctx, List<Product> list) {
         mContext = ctx;
         mList = (ArrayList<Product>) list;
     }
@@ -47,7 +48,7 @@ public class ProductsAdapter extends BaseAdapter {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
         if (view == null) {
-            view = inflater.inflate(R.layout.list_item, null);
+            view = inflater.inflate(R.layout.product_item, null);
             holder.imageView = (ImageView) view.findViewById(R.id.product_image);
             holder.productName = (TextView) view.findViewById(R.id.product_name);
             holder.productPrice = (TextView) view.findViewById(R.id.product_price);

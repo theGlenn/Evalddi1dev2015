@@ -9,23 +9,24 @@ import java.util.ArrayList;
  */
 public class MyApp extends Application {
 
-    public static ArrayList<Product> cartList = new ArrayList<>();
-    public static Application instance;
+    public static MyApp instance;
+    public ArrayList<Product> cartList = new ArrayList<>();
 
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
     }
 
-    public static Application getInstance() {
+    public static MyApp getInstance() {
         return instance;
     }
 
-    public static ArrayList<Product> getCartList() {
+    public ArrayList<Product> getCartList() {
         return cartList;
     }
 
-    public static void setCartList(ArrayList<Product> cartList) {
-        MyApp.cartList = cartList;
+    public void setCartList(ArrayList<Product> list) {
+        this.cartList = list;
     }
 }
