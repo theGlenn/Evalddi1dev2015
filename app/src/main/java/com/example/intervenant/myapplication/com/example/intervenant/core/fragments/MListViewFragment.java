@@ -10,44 +10,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.intervenant.myapplication.R;
 import com.example.intervenant.myapplication.com.example.intervenant.core.DetailActivity;
-import com.example.intervenant.myapplication.com.example.intervenant.core.Fruit;
-import com.example.intervenant.myapplication.com.example.intervenant.core.fragments.dummy.FruitProvider;
+import com.example.intervenant.myapplication.com.example.intervenant.core.Product;
+import com.example.intervenant.myapplication.com.example.intervenant.core.ProductProvider;
 
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MListViewFragment.OnFragmentListInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MListViewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MListViewFragment extends Fragment  implements AdapterView.OnItemClickListener {
+public class MListViewFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     ListView listView;
-    ListTestAdapter adapter;
+    ProductListGridAdapter adapter;
+    Button addToCart;
 
     private static final String ARG_PARAM1 = "param1";
-
-    private OnFragmentListInteractionListener mListener;
-
-    ArrayList<Fruit> list;
     private int listType;
+    ArrayList<Product> list;
+    private OnFragmentGridInteractionListener mListener;
 
     public MListViewFragment() {
         // Required empty public constructor
     }
 
-
-    // TODO: Rename and change types and number of parameters
     public static MListViewFragment newInstance(int type) {
         MListViewFragment fragment = new MListViewFragment();
         Bundle args = new Bundle();
@@ -59,40 +52,76 @@ public class MListViewFragment extends Fragment  implements AdapterView.OnItemCl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             list = new ArrayList<>();
             listType = getArguments().getInt(ARG_PARAM1);
+            adapter = new ProductListGridAdapter(list, getContext(), listType);
+        }
 
-            if(listType == 0){
-                list = FruitProvider.provideFromServer();
-            }else{
-                list = FruitProvider.provideFromFavorite();
-            }
+    }
 
-            adapter = new ListTestAdapter(list);
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(listType == 0){
+            ProductProvider.provideFromServer(getContext(), new ProductProvider.ProviderListener(){
+                @Override
+                public void provideProductlist(List<Product> list) {
+                    adapter.update(list);
+                }
+            });
+
+        } else {
+            adapter.update(ProductProvider.provideFromCart(getContext()));
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_mlist_view, container, false);
+        View view;
 
-        listView = (ListView)view.findViewById(R.id.listView);
-        listView.setOnItemClickListener(this);
-        listView.setAdapter(adapter);
+        if(listType == 0){
+            view =  inflater.inflate(R.layout.fragment_mgrid_view, container, false);
+            GridView gridview = (GridView) view.findViewById(R.id.gridview);
+            gridview.setAdapter(adapter);
+            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View v,
+                                        int position, long id) {
+                Toast.makeText(getContext(), "" + position,
+                        Toast.LENGTH_SHORT).show();
+               }
+            });
+           gridview.setAdapter(adapter);
+            /*gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View v,
+                                        int position, long id) {
+                    Toast.makeText(getContext(), "gridview clicked",
+                            Toast.LENGTH_SHORT).show();
+                    Intent detailIntent = new Intent(getContext(), DetailActivity.class);
+                    detailIntent.putExtra("name", list.get(position).name);
+                    detailIntent.putExtra("image", list.get(position).image);
+                    detailIntent.putExtra("info", list.get(position).info);
+                    detailIntent.putExtra("price", list.get(position).price);
+
+                    startActivity(detailIntent);
+                }
+            });*/
+        } else {
+            view =  inflater.inflate(R.layout.fragment_mlist_view, container, false);
+
+            listView = (ListView)view.findViewById(R.id.listView);
+            listView.setOnItemClickListener(this);
+            listView.setAdapter(adapter);
+        }
 
         return view;
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentListInteractionListener) {
-            mListener = (OnFragmentListInteractionListener) context;
-
+        if (context instanceof OnFragmentGridInteractionListener) {
+            mListener = (OnFragmentGridInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -107,32 +136,26 @@ public class MListViewFragment extends Fragment  implements AdapterView.OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Fruit fruit =  adapter.getItem(i);
+        Product obj =  adapter.getItem(i);
         if (mListener != null) {
-            mListener.onFragmentListInteraction(fruit);
+            mListener.onFragmentInteraction(obj);
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentListInteractionListener {
-        void onFragmentListInteraction(Fruit fruit);
+    public interface OnFragmentGridInteractionListener {
+        void onFragmentInteraction(Product obj);
     }
 
-    private class ListTestAdapter extends BaseAdapter {
+    private class ProductListGridAdapter extends BaseAdapter {
 
-        ArrayList<Fruit> mList;
+        ArrayList<Product> mList;
+        Context mContext;
+        int mType;
 
-        ListTestAdapter(ArrayList<Fruit> list){
+        ProductListGridAdapter(ArrayList<Product> list, Context context, int type){
             mList = list;
+            mContext = context;
+            mType = type;
         }
 
         @Override
@@ -143,28 +166,43 @@ public class MListViewFragment extends Fragment  implements AdapterView.OnItemCl
         @Override
         public View getView(int i, View view, ViewGroup parent) {
 
-            Fruit fruit = getItem(i);
+            final Product product = getItem(i);
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
             ViewHolder holder;
             if(view == null){
                 holder = new ViewHolder();
-                view = inflater.inflate(R.layout.list_test_item, parent, false);
-                holder.textView  = (TextView) view.findViewById(R.id.fruit_text);
-                holder.imgView = (ImageView) view.findViewById(R.id.fruit_img);
+                if (mType == 0) {
+                    view = inflater.inflate(R.layout.grid_item_layout, parent, false);
+                    holder.textView  = (TextView) view.findViewById(R.id.product_grid_text);
+                    holder.imgView = (ImageView) view.findViewById(R.id.product_grid_image);
+                    addToCart = (Button) view.findViewById(R.id.btn_add_to_cart);
+                    addToCart.setOnClickListener(new AdapterView.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ProductProvider.addToCart(getContext(), product);
+                            Toast.makeText(getContext(), "Product added to cart",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    view = inflater.inflate(R.layout.list_item_layout, parent, false);
+                    holder.textView  = (TextView) view.findViewById(R.id.product_list_text);
+                    holder.imgView = (ImageView) view.findViewById(R.id.product_list_image);
+                }
                 view.setTag(holder);
             }else{
                 holder = (ViewHolder) view.getTag();
             }
 
-            holder.textView.setText(fruit.name);
-            holder.imgView.setImageResource(fruit.image);
-
+            holder.textView.setText(product.name);
+            Glide.with(getActivity()).load(product.image).into(holder.imgView);
             return view;
+
         }
 
         @Override
-        public Fruit getItem(int i) {
+        public Product getItem(int i) {
             return mList.get(i);
         }
 
@@ -173,9 +211,16 @@ public class MListViewFragment extends Fragment  implements AdapterView.OnItemCl
             return 0;
         }
 
+        public void update(List<Product> list) {
+            mList.clear();
+            mList.addAll(list);
+            this.notifyDataSetChanged();
+        }
+
         public class ViewHolder {
             TextView textView;
             ImageView imgView;
         }
     }
+
 }
