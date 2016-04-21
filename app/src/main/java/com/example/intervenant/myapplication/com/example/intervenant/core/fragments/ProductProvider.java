@@ -1,6 +1,5 @@
 package com.example.intervenant.myapplication.com.example.intervenant.core.fragments;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -10,8 +9,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.intervenant.myapplication.R;
 import com.example.intervenant.myapplication.com.example.intervenant.core.Product;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,23 +22,15 @@ import java.util.ArrayList;
  * Created by intervenant on 18/04/16.
  */
 public class ProductProvider {
-    public static ArrayList<Product> provideFromLocal(){
 
+    public static ArrayList<Product> provideFromFavorite() {
         ArrayList<Product> list = new ArrayList<>();
-       /* list.add(new Product("doggy", R.drawable.chien));
-        list.add(new Product("doggy", R.drawable.chien));*/
+        list.add(new Product("doggy", "eee", "https://pbs.twimg.com/media/CgjXb-jWMAAQNB-.jpg:large"));
 
         return list;
     }
 
-    public static  ArrayList<Product> provideFromFavorite(){
-        ArrayList<Product> list = new ArrayList<>();
-        //list.add(new Product("apple", R.drawable.apple));
-
-        return list;
-    }
-
-    public interface ProductProviderListener{
+    public interface ProductProviderListener {
         void provideProducts(ArrayList<Product> products);
     }
 
@@ -54,7 +45,7 @@ public class ProductProvider {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(context, "Coucou",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Coucou", Toast.LENGTH_SHORT).show();
 
                         try {
 
@@ -95,5 +86,39 @@ public class ProductProvider {
         return list;
     }
 
+    public static ArrayList<Product> provideInCart(Context context, Product product){
+        final ArrayList<Product> list = new ArrayList<>();
+
+        Gson gson = new Gson();
+        String productJson = gson.toJson(product);
+
+        try{
+            JSONObject productsJsonO = new JSONObject(productJson);
+            JSONArray nameArray = productsJsonO.names();
+            JSONArray productsArray = productsJsonO.toJSONArray(nameArray);
+
+            for(int i=0;i<productsArray.length();i++)
+            {
+                String p = nameArray.getString(i) + "," + productsArray.getString(i);
+                Toast.makeText(context,
+                        p,
+                        Toast.LENGTH_LONG).show();
+
+            }
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
 
 }
+
+
+
+
+

@@ -4,18 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.intervenant.myapplication.R;
@@ -71,7 +66,7 @@ public class ProductFragmentView extends Fragment implements AdapterView.OnItemC
                 });
 
                 setHasOptionsMenu(true);
-            }else{
+            } else {
                 list = ProductProvider.provideFromFavorite();
             }
 
@@ -170,7 +165,7 @@ public class ProductFragmentView extends Fragment implements AdapterView.OnItemC
             }
 
             holder.textView.setText(product.name);
-            holder.textPrice.setText(product.price + " €");
+            holder.textPrice.setText("$" + product.price);
             Glide.with(parent.getContext()).load(product.image).into(holder.imgView);
 
             return view;

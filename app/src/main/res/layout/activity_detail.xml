@@ -41,7 +41,16 @@
         android:text="New Text"
         android:id="@+id/product_detail_description"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Buy it"
+        android:id="@+id/button_buy"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="25dp"/>
 
 
 </LinearLayout>
