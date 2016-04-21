@@ -4,10 +4,13 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.example.intervenant.myapplication.R;
@@ -29,7 +32,7 @@ import java.util.ArrayList;
  * Use the {@link ProductGridFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProductGridFragment extends Fragment {
+public class ProductGridFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private OnFragmentInteractionListener mListener;
 
@@ -82,7 +85,7 @@ public class ProductGridFragment extends Fragment {
                     }
                 });
             }else{
-                list = ProductProvider.provideFromFavorite();
+                list = ProductProvider.provideFromFavorite(getContext());
             }
 
             gridAdapter = new ProductGridAdapter(list);
@@ -94,6 +97,7 @@ public class ProductGridFragment extends Fragment {
         View view  = inflater.inflate(R.layout.fragment_product_grid, container, false);
 
         gridView = (GridView) view.findViewById(R.id.gridView);
+        gridView.setOnItemClickListener(this);
         gridView.setAdapter(gridAdapter);
 
         return view;
@@ -116,6 +120,15 @@ public class ProductGridFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Product product = gridAdapter.getItem(position);
+        if (mListener != null) {
+            Log.d("yolo", mListener.toString());
+            mListener.onFragmentGridInteraction(product);
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -127,6 +140,6 @@ public class ProductGridFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-
+        void onFragmentGridInteraction(Product product);
     }
 }

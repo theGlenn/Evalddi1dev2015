@@ -1,5 +1,7 @@
 package com.example.intervenant.myapplication.com.example.intervenant.core;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
