@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    tools:context="com.example.intervenant.myapplication.com.example.intervenant.core.DetailActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@drawable/laitamande"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/textName"
+        android:layout_alignRight="@+id/textPrice"
+        android:layout_alignEnd="@+id/textPrice"
+        android:layout_marginRight="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Uncle Bens rice"
+        android:id="@+id/textName"
+        android:textSize="27sp"
+        android:layout_above="@+id/textInfo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1.78"
+        android:id="@+id/textPrice"
+        android:textSize="27sp"
+        android:layout_alignTop="@+id/textName"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/textName"
+        android:layout_toEndOf="@+id/textName"
+        android:textAlignment="center"
+        android:layout_alignBottom="@+id/textName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Almond milk is a plant milk with a creamy texture and nutty taste. It contains neither cholesterol nor lactose, and is often consumed by the lactose-intolerant and others who wish to avoid dairy products, including vegans. Commercial almond milk comes in sweetened, unsweetened, plain, vanilla and chocolate flavors, and is usually enriched with vitamins. It can also be made at home using a blender, almonds and water Sales of almond milk overtook soy milk in the United States in 2013,[2] and by May 2014 it comprised two-thirds of the US plant-milk market.[3] In the United Kingdom, almond-milk sales increased from 36 million liters in 2011 to 92 million in 2013"
+        android:id="@+id/textInfo"
+        android:textSize="14sp"
+        android:layout_marginBottom="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADD TO CART"
+        android:id="@+id/button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="46dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>
