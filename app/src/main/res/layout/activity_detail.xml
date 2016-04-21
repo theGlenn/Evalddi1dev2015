@@ -14,6 +14,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/almond"
+        android:layout_below="@+id/switchCart"
+        android:layout_centerHorizontal="true" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ajouter au panier"
+        android:id="@+id/switchCart"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -23,7 +31,7 @@
         android:layout_height="wrap_content"
         android:text="test"
         android:textSize="45sp"
-        android:layout_below="@+id/imageView"
+        android:layout_above="@+id/price"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -32,7 +40,7 @@
         android:layout_height="wrap_content"
         android:text="test"
         android:textSize="45sp"
-        android:layout_below="@+id/price"
+        android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/price"
         android:layout_alignStart="@+id/price" />
 
@@ -42,7 +50,7 @@
         android:layout_height="wrap_content"
         android:text="test"
         android:textSize="45sp"
-        android:layout_below="@+id/name"
+        android:layout_above="@+id/info"
         android:layout_alignLeft="@+id/name"
         android:layout_alignStart="@+id/name" />
 

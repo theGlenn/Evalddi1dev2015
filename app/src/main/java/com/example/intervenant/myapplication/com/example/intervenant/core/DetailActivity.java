@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -39,12 +41,31 @@ public class DetailActivity extends AppCompatActivity {
             PriceTextView.setText(food.price);
             ImageView imageView = (ImageView)findViewById(R.id.imageView);
             Log.d("IMAGE/","HELLO");
+            food.isInCart = FoodProvider.isInCart(this,food);
             if(food.image != null){
                 Glide.with(this).load(food.image).into(imageView);
             }
             /*else {
                 imageView.setImageResource(fruit.resImage);
             }*/
+        }
+
+        Switch cartSwitch = (Switch) findViewById(R.id.switchCart);
+        if(cartSwitch != null) {
+            cartSwitch.setChecked(food.isInCart);
+            cartSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked) {
+                        Log.i("check","Wasn't checked");
+                        food.isInCart = false;
+                        FoodProvider.putFoodInCart(DetailActivity.this,food);
+                    } else {
+                        Log.i("check","Was checked");
+                        food.isInCart = true;
+                        FoodProvider.removeFoodFromCart(DetailActivity.this,food);
+                    }
+                }
+            });
         }
     }
 }

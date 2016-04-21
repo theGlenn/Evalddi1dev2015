@@ -10,14 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.bumptech.glide.Glide;
 import com.example.intervenant.myapplication.R;
+import com.example.intervenant.myapplication.com.example.intervenant.core.DetailActivity;
 import com.example.intervenant.myapplication.com.example.intervenant.core.Food;
 import com.example.intervenant.myapplication.com.example.intervenant.core.FoodProvider;
 import com.example.intervenant.myapplication.com.example.intervenant.core.FoodProvider;
@@ -83,33 +86,103 @@ public class GriedViewFragment extends Fragment implements AdapterView.OnItemCli
             list = new ArrayList<>();
             position = getArguments().getInt(POSITION);
 
-            FoodProvider.provideFromServer(getContext(), new Response.Listener<JSONObject>() {
+            //if(position == 0) {
+                FoodProvider.provideFromServer(getContext(), new Response.Listener<JSONObject>() {
 
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("JSON/", response.toString());
+                        JSONArray jsonArray = response.optJSONArray("data");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject obj = jsonArray.optJSONObject(i);
+                            Food food = null;
+                            try {
+                                food = new Food(obj);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            list.add(food);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+
+                });
+            /*} else {
+                list = FoodProvider.provideFromCart(getContext());
+            }*/
+            adapter = new GridAdapter(list);
+        }
+    }
+
+    /*
+    if(listType == 0){
+               FruitProvider.provideFromServer(getContext(), new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("JSON/",response.toString());
+                        JSONArray jsonArray = response.optJSONArray("data");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject obj = jsonArray.optJSONObject(i);
+                            Fruit fruit = new Fruit(obj);
+                            list.add(fruit);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                setHasOptionsMenu(true);
+            }else{
+                list = FruitProvider.provideFromFavorite();
+            }
+
+
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        if (getArguments() != null) {
+            list = new ArrayList<>();
+            listType = getArguments().getInt(ARG_PARAM1);
+
+
+            if(listType == 0) {
+                this.setHasOptionsMenu(true);
+            }
+
+            adapter = new ListTestAdapter(list);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (listType == 0) {
+            FruitProvider.provideFromServer(getContext(), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.d("JSON/", response.toString());
-                    JSONArray jsonArray = response.optJSONArray("data");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject obj = jsonArray.optJSONObject(i);
-                        Food food = null;
-                        try {
-                            food = new Food(obj);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        list.add(food);
-                    }
-                    adapter.notifyDataSetChanged();
-                }
 
+                    Gson gson = new Gson(); // Or use new GsonBuilder().create();
+                    JSONArray json = response.optJSONArray("data");
+
+                    Type listType = new TypeToken<List<Fruit>>() {
+                    }.getType();
+
+                    ArrayList<Fruit> array = gson.fromJson(json.toString(), listType);
+
+                    adapter.update(array);
+                }
             });
 
-            adapter = new GridAdapter(list);
-
+        } else {
+            adapter.update(FruitProvider.provideFromFavorite(this.getContext()));
         }
-
-
     }
+     */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

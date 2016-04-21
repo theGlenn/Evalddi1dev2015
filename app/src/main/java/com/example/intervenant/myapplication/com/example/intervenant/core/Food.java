@@ -11,12 +11,14 @@ public class Food {
     public String price;
     public String info;
     public String image;
+    public Boolean isInCart;
 
     public Food (String name, String price, String info, String image){
         this.name = name;
         this.price = price;
         this.info = info;
         this.image = image;
+        isInCart = false;
     }
 
     public Food (JSONObject obj) throws JSONException {

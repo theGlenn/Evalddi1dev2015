@@ -1,6 +1,7 @@
 package com.example.intervenant.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /*SharedPreferences preferences = getSharedPreferences("data", 0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.commit();*/
+
         setContentView(R.layout.activity_main);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -48,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onFragmentGridInteraction(Food food) {
-        Log.d("HELLOOOOOOOO/","ICIIII");
         Intent detailIntent = new Intent(this, DetailActivity.class);
         detailIntent.putExtra("name", food.name);
         detailIntent.putExtra("image", food.image);
