@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.intervenant.myapplication.com.example.intervenant.core.FoodProvider;
 
 import java.util.ArrayList;
 
@@ -50,8 +51,6 @@ public class DetailActivity extends AppCompatActivity {
             String priceValue =Float.toString(food.price);
             priceView.setText(priceValue);
 
-            //priceView.setText("1.6");
-
 
             ImageView imageView = (ImageView)findViewById(R.id.food_img);
             if(food.img != null) {
@@ -63,29 +62,17 @@ public class DetailActivity extends AppCompatActivity {
         }
 
 
-
-        /*
-        final Button button = (Button) findViewById(R.id.button_id);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-            }
-        });
-        */
-
         final FloatingActionButton buttonAdd = (FloatingActionButton) this.findViewById(R.id.buttonAddCart);
-
         assert buttonAdd != null;
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 System.out.println(food.name);
-
-
+                FoodProvider.putFoodInFavorite(DetailActivity.this,food);
 
             }
         });
+
 
     }
 

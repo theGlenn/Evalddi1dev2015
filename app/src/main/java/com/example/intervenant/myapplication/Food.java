@@ -11,13 +11,6 @@ public class Food {
     public float price;
 
 
-    //For cart
-    /*
-    public Food(String name, int resid){
-        this.name = name;
-    }
-    */
-
     public Food(String name, String imgUrl, String info, float price){
         this.name = name;
         this.img = imgUrl;

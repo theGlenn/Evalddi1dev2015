@@ -109,7 +109,7 @@ public class fragment_list extends Fragment implements AdapterView.OnItemClickLi
                 setHasOptionsMenu(true);    // info menu
 
             }else{
-                //list = FoodProvider.provideFromFavorite();
+                list = FoodProvider.provideFromFavorite(getActivity());    //provideFromFavorite
             }
 
             adapter = new ListTestAdapter(list);
@@ -161,6 +161,8 @@ public class fragment_list extends Fragment implements AdapterView.OnItemClickLi
     public interface OnFragmentInteractionListener {
         void OnFragmentInteraction(Food food);
     }
+
+
 
 
     private class ListTestAdapter extends BaseAdapter {
