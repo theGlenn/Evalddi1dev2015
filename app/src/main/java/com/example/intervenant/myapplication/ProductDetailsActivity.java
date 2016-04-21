@@ -2,11 +2,16 @@ package com.example.intervenant.myapplication;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 
@@ -25,9 +30,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
         TextView price = (TextView) findViewById(R.id.productDetails_price);
         TextView info = (TextView) findViewById(R.id.productDetails_info);
 
-        if (image != null && name != null && price != null && info != null) {
+        Button button = (Button) findViewById(R.id.productDetails_button_add);
 
-            Product product = new Product(productName, productPrice, productInfo, productImage);
+        if (image != null && name != null && price != null && info != null && button != null) {
+
+            final Product product = new Product(productName, productPrice, productInfo, productImage);
 
 
             Glide.with(this).load(product.getImage()).into(image);
@@ -43,6 +50,20 @@ public class ProductDetailsActivity extends AppCompatActivity {
             } else {
                 info.setText(this.getString(R.string.no_description));
             }
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ArrayList<Product> cartList = MyApp.getCartList();
+
+                    cartList.add(product);
+
+                    MyApp.setCartList(cartList);
+
+                    Log.i("CARTLIST", cartList.toString());
+
+                }
+            });
 
         }
     }

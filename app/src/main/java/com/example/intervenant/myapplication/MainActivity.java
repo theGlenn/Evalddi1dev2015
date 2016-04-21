@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPager viewPager;
     TabLayout tabLayout;
     ProductsFragmentAdapter adapterViewPager;
-    List<Product> cartList = new ArrayList<>();
+    public List<Product> cartList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
