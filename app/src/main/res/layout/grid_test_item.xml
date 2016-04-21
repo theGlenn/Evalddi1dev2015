@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="28dp"
+    android:paddingBottom="28dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/product_img"
+        android:src="@drawable/laitamande"
+        android:layout_gravity="left" />
+
+    <TextView
+        android:text="1.79"
+        android:id="@+id/product_price"
+        android:layout_marginLeft="62dp"
+        android:textSize="18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|left"
+        android:layout_marginTop="-35dp" />
+
+    <TextView
+        android:text="Uncle Bens Rice"
+        android:id="@+id/product_name"
+        android:layout_marginLeft="62dp"
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-50dp"
+        android:layout_gravity="center_horizontal|left" />
+
+</LinearLayout>
