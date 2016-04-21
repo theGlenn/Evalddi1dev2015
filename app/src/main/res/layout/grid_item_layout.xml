@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/product_grid_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:layout_width="200dp"
+        android:layout_height="200dp" />
 
     <TextView
         android:id="@+id/product_grid_text"
@@ -18,5 +18,11 @@
         android:layout_marginTop="5dp"
         android:gravity="center"
         android:textSize="12sp" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_add_to_cart"
+        android:text="@string/add_to_cart"
+        android:layout_gravity="center"/>
 
 </LinearLayout>

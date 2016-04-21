@@ -1,6 +1,7 @@
 package com.example.intervenant.myapplication.com.example.intervenant.core;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -54,6 +55,32 @@ public class ProductProvider {
                     }
                 });
         queue.add(jsObjRequest);
+    }
+
+    public static  ArrayList<Product> provideFromCart(Context context){
+        SharedPreferences settings = context.getApplicationContext().getSharedPreferences("cart", Context.MODE_PRIVATE);
+        String jsonString = settings.getString("jsonProduct", "[]");
+
+        Type type = new TypeToken<ArrayList<Product>>() {}.getType();
+
+        ArrayList json = new Gson().fromJson(jsonString, type);
+
+        return json;
+    }
+
+    public static void addToCart(Context context, Product obj){
+        ArrayList<Product> list = provideFromCart(context);
+        list.add(obj);
+        saveToCart(context, list);
+    }
+
+    public static void saveToCart(Context context, ArrayList<Product> obj){
+        SharedPreferences settings = context.getApplicationContext().getSharedPreferences("cart", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        Type type = new TypeToken<ArrayList<Product>>() {}.getType();
+        String json = new Gson().toJson(obj, type);
+        editor.putString("jsonProduct", json);
+        editor.apply();
     }
 
     public interface ProviderListener{

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,6 +28,7 @@ public class MListViewFragment extends Fragment implements AdapterView.OnItemCli
 
     ListView listView;
     ProductListGridAdapter adapter;
+    Button addToCart;
 
     private static final String ARG_PARAM1 = "param1";
     private int listType;
@@ -51,9 +53,25 @@ public class MListViewFragment extends Fragment implements AdapterView.OnItemCli
         if (getArguments() != null) {
             list = new ArrayList<>();
             listType = getArguments().getInt(ARG_PARAM1);
-
+            adapter = new ProductListGridAdapter(list, getContext(), listType);
         }
-        adapter = new ProductListGridAdapter(list, getContext(), listType);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(listType == 0){
+            ProductProvider.provideFromServer(getContext(), new ProductProvider.ProviderListener(){
+                @Override
+                public void provideProductlist(List<Product> list) {
+                    adapter.update(list);
+                }
+            });
+
+        } else {
+            adapter.update(ProductProvider.provideFromCart(getContext()));
+        }
     }
 
     @Override
@@ -78,16 +96,6 @@ public class MListViewFragment extends Fragment implements AdapterView.OnItemCli
             listView.setOnItemClickListener(this);
             listView.setAdapter(adapter);
         }
-
-
-        ProductProvider.provideFromServer(getContext(), new ProductProvider.ProviderListener(){
-            @Override
-            public void provideProductlist(List<Product> productList) {
-                //Log.e("data", productList.toString());
-                adapter.update(productList);
-            }
-        });
-
 
         return view;
     }
@@ -146,7 +154,7 @@ public class MListViewFragment extends Fragment implements AdapterView.OnItemCli
         @Override
         public View getView(int i, View view, ViewGroup parent) {
 
-            Product product = getItem(i);
+            final Product product = getItem(i);
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
             ViewHolder holder;
@@ -156,13 +164,20 @@ public class MListViewFragment extends Fragment implements AdapterView.OnItemCli
                     view = inflater.inflate(R.layout.grid_item_layout, parent, false);
                     holder.textView  = (TextView) view.findViewById(R.id.product_grid_text);
                     holder.imgView = (ImageView) view.findViewById(R.id.product_grid_image);
+                    addToCart = (Button) view.findViewById(R.id.btn_add_to_cart);
+                    addToCart.setOnClickListener(new AdapterView.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ProductProvider.addToCart(getContext(), product);
+                            Toast.makeText(getContext(), "Product added to cart",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
                     view = inflater.inflate(R.layout.list_item_layout, parent, false);
                     holder.textView  = (TextView) view.findViewById(R.id.product_list_text);
                     holder.imgView = (ImageView) view.findViewById(R.id.product_list_image);
                 }
-
-
                 view.setTag(holder);
             }else{
                 holder = (ViewHolder) view.getTag();
