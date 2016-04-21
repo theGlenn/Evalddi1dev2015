@@ -7,10 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.intervenant.myapplication.Adapters.ProductsFragmentAdapter;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
 
     ViewPager viewPager;

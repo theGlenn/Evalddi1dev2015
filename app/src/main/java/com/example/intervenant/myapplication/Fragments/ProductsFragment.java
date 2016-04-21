@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,10 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.example.intervenant.myapplication.Adapters.CartListAdapter;
@@ -119,6 +116,7 @@ public class ProductsFragment extends Fragment {
                 cartList.addAll(MyApp.getInstance().getCartList());
 
                 cartListAdapter = new CartListAdapter(cartList);
+                cartListAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -154,7 +152,6 @@ public class ProductsFragment extends Fragment {
             listView.setVisibility(View.VISIBLE);
 
 
-
             if (listView != null) {
                 listView.setAdapter(cartListAdapter);
             }
@@ -186,7 +183,7 @@ public class ProductsFragment extends Fragment {
         }
     }
 
-    public void updateCart(){
+    public void updateCart() {
         cartList.clear();
         cartList.addAll(MyApp.getInstance().getCartList());
         cartListAdapter.notifyDataSetChanged();
@@ -229,7 +226,7 @@ public class ProductsFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
